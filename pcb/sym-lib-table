@@ -2,4 +2,5 @@
   (version 7)
   (lib (name "MCU_Module_RaspberryPi_Pico")(type "KiCad")(uri "${KIPRJMOD}/symbols/RaspberryPi_Pico/MCU_Module_RaspberryPi_Pico.kicad_sym")(options "")(descr ""))
   (lib (name "kbd")(type "Legacy")(uri "${KIPRJMOD}/symbols/kbd-3-final/kicad-symbols/kbd.lib")(options "")(descr ""))
+  (lib (name "trsJack")(type "KiCad")(uri "${KIPRJMOD}/symbols/trs.pretty/SJ-3501-SMT-TR.kicad_sym")(options "")(descr ""))
 )

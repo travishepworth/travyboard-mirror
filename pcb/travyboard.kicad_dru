@@ -1,0 +1,4 @@
+(version 1)
+(rule "TRS Jacks All Elements Edge Exemption"
+    (condition "A.Parent == 'J1' || A.Parent == 'J2'")
+    (constraint edge_clearance (min 0mm)))

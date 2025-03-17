@@ -7,4 +7,5 @@
   (lib (name "audio-jacks")(type "KiCad")(uri "${KIPRJMOD}/symbols/audio-jacks.pretty")(options "")(descr ""))
   (lib (name "usbc")(type "KiCad")(uri "${KIPRJMOD}/symbols/usbc.pretty")(options "")(descr ""))
   (lib (name "oled")(type "KiCad")(uri "${KIPRJMOD}/symbols/oled.pretty")(options "")(descr ""))
+  (lib (name "trs-jack")(type "KiCad")(uri "${KIPRJMOD}/symbols/trs.pretty")(options "")(descr ""))
 )
