@@ -1,7 +1,7 @@
 (footprint "CherryMX_Hotswap"
-	(version 20240108)
+	(version 20241229)
 	(generator "pcbnew")
-	(generator_version "8.0")
+	(generator_version "9.0")
 	(layer "F.Cu")
 	(property "Reference" "REF**"
 		(at 7.1 8.2 0)
@@ -23,18 +23,6 @@
 		(effects
 			(font
 				(size 1 1)
-				(thickness 0.15)
-			)
-		)
-	)
-	(property "Footprint" ""
-		(at 0 0 0)
-		(layer "F.Fab")
-		(hide yes)
-		(uuid "f9cd176b-d510-4bf1-baef-99c9f75d2b91")
-		(effects
-			(font
-				(size 1.27 1.27)
 				(thickness 0.15)
 			)
 		)
@@ -64,6 +52,36 @@
 		)
 	)
 	(attr through_hole)
+	(fp_line
+		(start -9.5 -9.5)
+		(end -9.5 -9.5)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "10778836-a640-4874-acb4-5eb59c591a20")
+	)
+	(fp_line
+		(start -9.5 9.5)
+		(end -9.5 9.5)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "31d10199-6b5a-456b-8d5a-c9ab4b98fce5")
+	)
+	(fp_line
+		(start 9.5 -9.5)
+		(end 9.5 -9.5)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "bf8a74ef-4ac8-42b7-b669-5a49fad1cb7b")
+	)
 	(fp_line
 		(start -5.9 -4.7)
 		(end -5.9 -3.95)
@@ -258,36 +276,6 @@
 		(uuid "3ecee57e-57ae-4eda-8c2d-92f229861b5a")
 	)
 	(fp_line
-		(start -9.5 -9.5)
-		(end -9.5 -9.5)
-		(stroke
-			(width 0.1)
-			(type default)
-		)
-		(layer "F.SilkS")
-		(uuid "10778836-a640-4874-acb4-5eb59c591a20")
-	)
-	(fp_line
-		(start -9.5 9.5)
-		(end -9.5 9.5)
-		(stroke
-			(width 0.1)
-			(type default)
-		)
-		(layer "F.SilkS")
-		(uuid "31d10199-6b5a-456b-8d5a-c9ab4b98fce5")
-	)
-	(fp_line
-		(start 9.5 -9.5)
-		(end 9.5 -9.5)
-		(stroke
-			(width 0.1)
-			(type default)
-		)
-		(layer "F.SilkS")
-		(uuid "bf8a74ef-4ac8-42b7-b669-5a49fad1cb7b")
-	)
-	(fp_line
 		(start -9.525 -9.525)
 		(end 9.525 -9.525)
 		(stroke
@@ -445,24 +433,36 @@
 	(pad "1" smd rect
 		(at -7.085 -2.54 180)
 		(size 2.55 2.5)
-		(layers "B.Cu" "B.Paste" "B.Mask")
+		(layers "B.Cu" "B.Mask" "B.Paste")
 		(uuid "6e61e3fb-6cda-4072-b223-9dd231113bf5")
 	)
 	(pad "2" smd rect
 		(at 5.842 -5.08 180)
 		(size 2.55 2.5)
-		(layers "B.Cu" "B.Paste" "B.Mask")
+		(layers "B.Cu" "B.Mask" "B.Paste")
 		(uuid "a84a1323-70a2-4b32-b8e1-bfc16ea84a11")
 	)
-	(model "/Users/foostan/src/github.com/foostan/kbd/kicad-packages3D/kbd.3dshapes/Kailh-CherryMX-Socket.step"
+	(embedded_fonts no)
+	(model "${KIPRJMOD}/models/Kailh Hotswap MX.step"
 		(offset
-			(xyz -1.3 7.6 -3.6)
+			(xyz -4.7 12.6 11.4)
 		)
 		(scale
 			(xyz 1 1 1)
 		)
 		(rotate
-			(xyz 0 0 180)
+			(xyz -0 -180 180)
+		)
+	)
+	(model "${KIPRJMOD}/models/MX .STEP"
+		(offset
+			(xyz 7.35 7.35 4.5)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz -90 -0 -180)
 		)
 	)
 )

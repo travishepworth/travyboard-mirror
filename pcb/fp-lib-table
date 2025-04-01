@@ -8,4 +8,5 @@
   (lib (name "usbc")(type "KiCad")(uri "${KIPRJMOD}/symbols/usbc.pretty")(options "")(descr ""))
   (lib (name "oled")(type "KiCad")(uri "${KIPRJMOD}/symbols/oled.pretty")(options "")(descr ""))
   (lib (name "trs-jack")(type "KiCad")(uri "${KIPRJMOD}/symbols/trs.pretty")(options "")(descr ""))
+  (lib (name "mouseBites")(type "KiCad")(uri "${KIPRJMOD}/symbols/mouse-bite.pretty")(options "")(descr ""))
 )
