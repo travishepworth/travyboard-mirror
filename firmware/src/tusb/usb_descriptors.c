@@ -24,6 +24,7 @@
  */
 
 #include "usb_descriptors.h"
+#include "bsp/board.h"
 #include "tusb.h"
 
 /* A combination of interfaces must have a unique product id, since PC will save
@@ -75,7 +76,8 @@ uint8_t const *tud_descriptor_device_cb(void) {
 
 uint8_t const desc_hid_report[] = {
     TUD_HID_REPORT_DESC_KEYBOARD(HID_REPORT_ID(REPORT_ID_KEYBOARD)),
-    TUD_HID_REPORT_DESC_MOUSE(HID_REPORT_ID(REPORT_ID_MOUSE))
+    TUD_HID_REPORT_DESC_MOUSE(HID_REPORT_ID(REPORT_ID_MOUSE)),
+    TUD_HID_REPORT_DESC_CONSUMER(HID_REPORT_ID(REPORT_ID_CONSUMER_CONTROL))
 
 };
 

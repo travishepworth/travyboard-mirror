@@ -6,11 +6,6 @@
 #include <cstdint>
 #include <string>
 
-#define LEFT_MOD_ROW_PIN 15
-#define LEFT_MOD_COLUMN_PIN 13
-#define RIGHT_MOD_ROW_PIN 15
-#define RIGHT_MOD_COLUMN_PIN 11
-
 #define NULL_VALUE 255
 
 #define DEBOUNCE_TIME 15
@@ -57,10 +52,10 @@ private:
 
   void refresh(void);
 
-  constexpr static uint8_t LEFT_ROW_PINS[2] = {14, 15};
-  constexpr static uint8_t LEFT_COLUMN_PINS[3] = {11, 12, 13};
-  constexpr static uint8_t RIGHT_ROW_PINS[2] = {14, 15};
-  constexpr static uint8_t RIGHT_COLUMN_PINS[3] = {11, 12, 13};
+  constexpr static uint8_t LEFT_ROW_PINS[4] = {28, 11, 10, 9};
+  constexpr static uint8_t LEFT_COLUMN_PINS[7] = {13, 14, 15, 26, 27, 12, 29};
+  constexpr static uint8_t RIGHT_ROW_PINS[4] = {2, 3, 13, 15};
+  constexpr static uint8_t RIGHT_COLUMN_PINS[7] = {4, 7, 8, 9, 10, 11, 12};
 
 public:
   KeyBoard(const std::int8_t &name);

@@ -69,15 +69,11 @@ int main() {
   tusb_init();
   uart_init();
 
-  gpio_init(2);
-  gpio_set_dir(2, GPIO_OUT);
-  gpio_put(2, false);
-
   Keys keys;
 
   while (true) {
     tud_task(); // tinyusb device task
-    led_blinking_task(); // task to set blink rate
+    // led_blinking_task(); // task to set blink rate
 
     // Scan key array and return current rows and columns in struct keys
     keys = left_keyboard.scan_pins();

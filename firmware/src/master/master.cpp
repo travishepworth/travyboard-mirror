@@ -30,7 +30,6 @@
 #include "hardware/uart.h"
 #include "tusb.h"
 
-#include "encoder.hpp"
 #include "keyboard.hpp"
 #include "usb_descriptors.h"
 #include <cstdint>
@@ -57,9 +56,6 @@ static uint32_t blink_interval_ms = BLINK_NOT_MOUNTED;
 void led_blinking_task(void); // define function prototype
 
 KeyBoard keyboard(RIGHT); // create right keyboard object
-
-// Create rotary encoders
-RotaryEncoder horizontal_encoder(9, 8, 7);
 
 // Function to initialize uart
 void uart_init() {
@@ -91,23 +87,16 @@ int main(void) {
   tusb_init();
   uart_init();
 
-  gpio_init(2);
-  gpio_set_dir(2, GPIO_OUT);
-  gpio_put(2, false);
+  // gpio_init(2);
+  // gpio_set_dir(2, GPIO_OUT);
+  // gpio_put(2, false);
 
   while (true) {
     tud_task(); // tinyusb device task
 
     // Task to manage the blinking of the onboard LED
-    led_blinking_task();
+    // led_blinking_task();
     keyboard.scan_buttons();
-    int encoder_position = horizontal_encoder.get_position();
-    if (encoder_position > 0) {
-      send_mouse_report(0, -15);
-    } else if (encoder_position < 0) {
-      send_mouse_report(0, 15);
-    }
-    horizontal_encoder.reset_position();
   }
 
   return 0;

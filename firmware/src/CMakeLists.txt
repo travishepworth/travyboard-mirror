@@ -6,8 +6,6 @@ target_sources(master PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}/master/master.cpp
     ${CMAKE_CURRENT_LIST_DIR}/keymap/keymap.cpp
     ${CMAKE_CURRENT_LIST_DIR}/keyboard/keyboard.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rotary_encoder/encoder.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/oled/oled.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tusb/usb_descriptors.c
 )
 
@@ -27,8 +25,6 @@ target_sources(slave PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}/slave/slave.cpp
     ${CMAKE_CURRENT_LIST_DIR}/keymap/keymap.cpp
     ${CMAKE_CURRENT_LIST_DIR}/keyboard/keyboard.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rotary_encoder/encoder.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/oled/oled.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tusb/usb_descriptors.c
 )
 
@@ -37,15 +33,11 @@ target_include_directories(slave PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}/keyboard
     ${CMAKE_CURRENT_LIST_DIR}/keymap
     ${CMAKE_CURRENT_LIST_DIR}/layers
-    ${CMAKE_CURRENT_LIST_DIR}/oled
-    ${CMAKE_CURRENT_LIST_DIR}/rotary_encoder
     ${CMAKE_CURRENT_LIST_DIR}/tusb
 )
 
 pico_enable_stdio_uart(master 1)
 pico_enable_stdio_uart(slave 1)
-
-# example_auto_set_url(slave)
 
 # In addition to pico_stdlib required for common PicoSDK functionality, add dependency on tinyusb_device
 # for TinyUSB device support and tinyusb_board for the additional board support library used by the example

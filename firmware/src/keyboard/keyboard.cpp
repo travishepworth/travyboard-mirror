@@ -2,6 +2,7 @@
 
 #include "keyboard.hpp"
 #include "bsp/board.h"
+#include "class/hid/hid.h"
 #include "hardware/gpio.h"
 #include "hardware/uart.h"
 #include "keymap.hpp"
@@ -15,12 +16,12 @@ KeyMap left_keymap(LEFT);
 KeyMap right_keymap(RIGHT);
 
 // Variable to hold keys ready for keypress send
-static uint8_t staged_keys[6]; 
+static uint8_t staged_keys[6];
 // Variable to hold pressed keys before layer is applied
-static uint8_t held_keys[6][3]; //2nd array hold row, col, half
-static int total_keys; // Store total amount of keys presses
+static uint8_t held_keys[6][3]; // 2nd array hold row, col, half
+static int total_keys;          // Store total amount of keys presses
 
-static bool left_layer = false; // Store if left layer key is pressed
+static bool left_layer = false;  // Store if left layer key is pressed
 static bool right_layer = false; // Store if right layer key is pressed
 
 KeyBoard::KeyBoard(const std::int8_t &name) {
@@ -145,20 +146,25 @@ uint8_t KeyBoard::check_layer(void) {
 
 void KeyBoard::send_keyboard_report(uint8_t layer) {
   // Send keypresses for held keys
-  uint8_t keycode; // Initialize keycode variable
+  uint8_t keycode;       // Initialize keycode variable
+  uint8_t modifier = 0;  // Initialize modifier variable
+  static uint16_t media_key = 0; // Initialize media key variable
+  static bool media_pressed = false; // Variable to check if media key is pressed
+  bool media_key_active = false;
+
   // Loop through all of the held keys
   for (uint8_t keys = 0; keys < total_keys; keys++) {
-    uint8_t row = held_keys[keys][0]; // Set row
+    uint8_t row = held_keys[keys][0];    // Set row
     uint8_t column = held_keys[keys][1]; // Set column
     uint8_t half = held_keys[keys][2];
 
     // Get Keycode from keymap depending on which half it is
     if (half == LEFT_HALF) {
-    keycode = left_keymap.return_keycode(row, column, layer);
+      keycode = left_keymap.return_keycode(row, column, layer);
     } else if (half == RIGHT_HALF) {
-    keycode = right_keymap.return_keycode(row, column, layer);
+      keycode = right_keymap.return_keycode(row, column, layer);
     } else {
-    keycode = NULL_VALUE; // Return null if anything else
+      keycode = NULL_VALUE; // Return null if anything else
     }
 
     // Skip Invalid Keycodes | Layers shouldn't make it here but just in case
@@ -166,25 +172,71 @@ void KeyBoard::send_keyboard_report(uint8_t layer) {
       continue;
     }
 
-    // Ensure the same keycode doesn't get added twice
-    bool found = false;
-    for (uint8_t code : staged_keys) {
-      if (code == keycode) {
-        found = true;
-        break;
-      }
-    }
+    switch (keycode) {
+      // Check for modifier keys
+    case 0xE8:
+      modifier |= KEYBOARD_MODIFIER_LEFTGUI;
+      break;
+    case 0xE9:
+      modifier |= KEYBOARD_MODIFIER_LEFTALT;
+      break;
 
-    // Add the key to the staged_keys array
-    if (!found) {
-      staged_keys[total_keys] = keycode;
-      total_keys++;
+      // Check for media keys
+    case HID_USAGE_CONSUMER_PLAY_PAUSE:
+      media_key = keycode;
+      media_key_active = true; // Set media key active to true
+      break;
+    case HID_USAGE_CONSUMER_SCAN_PREVIOUS:
+      media_key = keycode;
+      media_key_active = true; // Set media key active to true
+      break;
+    case HID_USAGE_CONSUMER_SCAN_NEXT:
+      media_key = keycode;
+      media_key_active = true; // Set media key active to true
+      break;
+    case HID_USAGE_CONSUMER_BRIGHTNESS_DECREMENT:
+      media_key = keycode;
+      media_key_active = true; // Set media key active to true
+      break;
+    case HID_USAGE_CONSUMER_BRIGHTNESS_INCREMENT:
+      media_key = keycode;
+      media_key_active = true; // Set media key active to true
+      break;
+
+      // Check for other keys
+
+    default:
+      // Ensure the same keycode doesn't get added twice
+      bool found = false;
+      for (uint8_t code : staged_keys) {
+        if (code == keycode) {
+          found = true;
+          break;
+        }
+      }
+
+      // Add the key to the staged_keys array
+      if (!found) {
+        staged_keys[total_keys] = keycode;
+        total_keys++;
+      }
     }
   }
 
   // Send keypress if HID is ready
   if (tud_hid_ready()) {
-    tud_hid_keyboard_report(REPORT_ID_KEYBOARD, 0, staged_keys);
+
+    if (media_key_active && !media_pressed) {
+      tud_hid_report(REPORT_ID_CONSUMER_CONTROL, &media_key, sizeof(media_key));
+      media_pressed = true; // Reset media key pressed to false
+    } else if (!media_key_active && media_pressed) {
+      // Send empty report to clear the media key
+      media_key = 0;
+      tud_hid_report(REPORT_ID_CONSUMER_CONTROL, &media_key, sizeof(media_key));
+      media_pressed = false; // Reset media key pressed to false
+    }
+
+    tud_hid_keyboard_report(REPORT_ID_KEYBOARD, modifier, staged_keys);
     // Make sure memory is completely clear just in case
     memset(staged_keys, 0, sizeof(staged_keys));
   }
@@ -249,4 +301,3 @@ void KeyBoard::refresh(void) {
   left_layer = false;
   right_layer = false;
 }
-
