@@ -5,6 +5,13 @@
 A personal project demonstrating how to build a keyboard using the 
 Raspberry Pi Pico microcontroller in c++.
 
+### Photos
+
+<div style="display: flex; justify-content: space-around;">
+  <img src="./assets/IMG_1684.jpeg" alt="First Photo" style="width: 45%; transform: rotate(-90deg);">
+  <img src="./assets/IMG_1680.jpeg" alt="Second Photo" style="width: 45%;">
+</div>
+
 ### Requirements
 
 - Two Raspberry Pi Picos
