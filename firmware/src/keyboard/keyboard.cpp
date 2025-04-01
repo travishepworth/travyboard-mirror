@@ -8,6 +8,7 @@
 #include "keymap.hpp"
 #include "pico/time.h"
 #include "usb_descriptors.h"
+#include <cstdint>
 
 #define LEFT 0
 #define RIGHT 1
@@ -20,6 +21,9 @@ static uint8_t staged_keys[6];
 // Variable to hold pressed keys before layer is applied
 static uint8_t held_keys[6][3]; // 2nd array hold row, col, half
 static int total_keys;          // Store total amount of keys presses
+
+static uint8_t previous_keys[6][4]; // Store previous keys pressed, all data for
+                                    // future comparison
 
 static bool left_layer = false;  // Store if left layer key is pressed
 static bool right_layer = false; // Store if right layer key is pressed
@@ -146,10 +150,12 @@ uint8_t KeyBoard::check_layer(void) {
 
 void KeyBoard::send_keyboard_report(uint8_t layer) {
   // Send keypresses for held keys
-  uint8_t keycode;       // Initialize keycode variable
-  uint8_t modifier = 0;  // Initialize modifier variable
-  static uint16_t media_key = 0; // Initialize media key variable
-  static bool media_pressed = false; // Variable to check if media key is pressed
+  uint8_t keycode;                 // Initialize keycode variable
+  uint8_t modifier = 0;            // Initialize modifier variable
+  uint8_t new_previous_keys[6][4]; // Temp Array to hold new previous keys
+  static uint16_t media_key = 0;   // Initialize media key variable
+  static bool media_pressed =
+      false; // Variable to check if media key is pressed
   bool media_key_active = false;
 
   // Loop through all of the held keys
@@ -157,12 +163,29 @@ void KeyBoard::send_keyboard_report(uint8_t layer) {
     uint8_t row = held_keys[keys][0];    // Set row
     uint8_t column = held_keys[keys][1]; // Set column
     uint8_t half = held_keys[keys][2];
+    uint8_t temp_layer = layer; // Get the current layer
+
+    for (int i = 0; i < 6; i++) {
+      // Check if the key is already in the previous keys
+      if (previous_keys[i][0] == row && previous_keys[i][1] == column &&
+          previous_keys[i][2] == half && previous_keys[i][0] != NULL_VALUE) {
+        // If it is, set the keycode layer to the previous layer
+        temp_layer = previous_keys[i][3];
+        // add G key for tetsting
+        break;
+      }
+    }
+
+    new_previous_keys[keys][0] = row; // Set previous(current) keys
+    new_previous_keys[keys][1] = column;
+    new_previous_keys[keys][2] = half;
+    new_previous_keys[keys][3] = temp_layer;
 
     // Get Keycode from keymap depending on which half it is
     if (half == LEFT_HALF) {
-      keycode = left_keymap.return_keycode(row, column, layer);
+      keycode = left_keymap.return_keycode(row, column, temp_layer);
     } else if (half == RIGHT_HALF) {
-      keycode = right_keymap.return_keycode(row, column, layer);
+      keycode = right_keymap.return_keycode(row, column, temp_layer);
     } else {
       keycode = NULL_VALUE; // Return null if anything else
     }
@@ -183,28 +206,15 @@ void KeyBoard::send_keyboard_report(uint8_t layer) {
 
       // Check for media keys
     case HID_USAGE_CONSUMER_PLAY_PAUSE:
-      media_key = keycode;
-      media_key_active = true; // Set media key active to true
-      break;
     case HID_USAGE_CONSUMER_SCAN_PREVIOUS:
-      media_key = keycode;
-      media_key_active = true; // Set media key active to true
-      break;
     case HID_USAGE_CONSUMER_SCAN_NEXT:
-      media_key = keycode;
-      media_key_active = true; // Set media key active to true
-      break;
     case HID_USAGE_CONSUMER_BRIGHTNESS_DECREMENT:
-      media_key = keycode;
-      media_key_active = true; // Set media key active to true
-      break;
     case HID_USAGE_CONSUMER_BRIGHTNESS_INCREMENT:
       media_key = keycode;
       media_key_active = true; // Set media key active to true
       break;
 
       // Check for other keys
-
     default:
       // Ensure the same keycode doesn't get added twice
       bool found = false;
@@ -223,6 +233,8 @@ void KeyBoard::send_keyboard_report(uint8_t layer) {
     }
   }
 
+  // Check to see if any of the previous keys were on an elevated layer
+
   // Send keypress if HID is ready
   if (tud_hid_ready()) {
 
@@ -238,6 +250,8 @@ void KeyBoard::send_keyboard_report(uint8_t layer) {
 
     tud_hid_keyboard_report(REPORT_ID_KEYBOARD, modifier, staged_keys);
     // Make sure memory is completely clear just in case
+    // Set the just sent keys to previous keys, then clear the memory
+    memcpy(previous_keys, new_previous_keys, sizeof(previous_keys));
     memset(staged_keys, 0, sizeof(staged_keys));
   }
 }
