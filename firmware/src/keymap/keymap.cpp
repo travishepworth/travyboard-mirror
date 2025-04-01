@@ -66,19 +66,19 @@ KeyMap::KeyMap(const std::uint8_t &name) {
             {'\0', '\0', '\0', '\0'}, // Extra 3
             {HID_KEY_Y, HID_KEY_6, HID_KEY_6, HID_KEY_F6},
             {HID_KEY_U, HID_KEY_7, HID_KEY_7, HID_KEY_F7},
-            {HID_KEY_I, HID_KEY_8, HID_KEY_BRACKET_LEFT, HID_KEY_F8},
-            {HID_KEY_O, HID_KEY_9, HID_KEY_BRACKET_RIGHT, HID_KEY_F9},
-            {HID_KEY_P, HID_KEY_0, HID_KEY_BACKSLASH, HID_KEY_F10},
-            {HID_KEY_BACKSPACE, HID_KEY_MINUS, HID_KEY_EQUAL, '\0'},
+            {HID_KEY_I, HID_KEY_8, HID_KEY_BACKSLASH, HID_KEY_F8},
+            {HID_KEY_O, HID_KEY_9, HID_KEY_BRACKET_LEFT, HID_KEY_F9},
+            {HID_KEY_P, HID_KEY_0, HID_KEY_BRACKET_RIGHT, HID_KEY_F10},
+            {HID_KEY_BACKSPACE, HID_KEY_MINUS, HID_KEY_EQUAL, HID_KEY_F11},
         },
         {
             {'\0', '\0', '\0', '\0'}, // Extra 4
-            {HID_KEY_H, HID_KEY_ARROW_LEFT, '\0', '\0'},
-            {HID_KEY_J, HID_KEY_ARROW_DOWN, HID_KEY_VOLUME_DOWN, '\0'},
-            {HID_KEY_K, HID_KEY_ARROW_UP, HID_KEY_VOLUME_UP, '\0'},
-            {HID_KEY_L, HID_KEY_ARROW_RIGHT, '\0', '\0'},
-            {HID_KEY_SEMICOLON, HID_KEY_APOSTROPHE, HID_KEY_F4, '\0'},
-            {HID_KEY_ENTER, '\0', '\0', '\0'},
+            {HID_KEY_H, HID_KEY_ARROW_LEFT, HID_KEY_HOME, '\0'},
+            {HID_KEY_J, HID_KEY_ARROW_DOWN, HID_KEY_INSERT, '\0'},
+            {HID_KEY_K, HID_KEY_ARROW_UP, HID_KEY_DELETE, '\0'},
+            {HID_KEY_L, HID_KEY_ARROW_RIGHT, HID_KEY_END, '\0'},
+            {HID_KEY_SEMICOLON, HID_KEY_APOSTROPHE, '\0', '\0'},
+            {HID_KEY_ENTER, HID_KEY_ENTER, HID_KEY_ENTER, HID_KEY_F12},
         },
         {
             {'\0', '\0', '\0', '\0'}, // Empty - No key here
@@ -86,7 +86,7 @@ KeyMap::KeyMap(const std::uint8_t &name) {
             {HID_KEY_M, '\0', HID_USAGE_CONSUMER_BRIGHTNESS_INCREMENT, '\0'},
             {HID_KEY_COMMA, '\0', HID_USAGE_CONSUMER_SCAN_PREVIOUS, '\0'},
             {HID_KEY_PERIOD, '\0', HID_USAGE_CONSUMER_SCAN_NEXT, '\0'},
-            {HID_KEY_SLASH, 0xCD, HID_USAGE_CONSUMER_PLAY_PAUSE, '\0'},
+            {HID_KEY_SLASH, '\0', HID_USAGE_CONSUMER_PLAY_PAUSE, '\0'},
             {HID_KEY_SHIFT_RIGHT, HID_KEY_SHIFT_RIGHT, HID_KEY_SHIFT_RIGHT, HID_KEY_SHIFT_RIGHT},
         },
         {
