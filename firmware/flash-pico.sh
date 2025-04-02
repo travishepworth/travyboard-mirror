@@ -33,24 +33,16 @@ echo "Pico found:"
 sudo mount /dev/"$device"1 /home/travis/rpi-pico
 echo "Device $device mounted at /home/travis/rpi-pico/"
 
-while true; do
-  echo "Flashing Master(1) or Slave(2)? (q to quit)"
-  read -r pico
-  if [ "$pico" = "1" ]; then
-    echo 'Flashing Master to connected Pico'
-    sudo cp ./src/master.uf2 /home/travis/rpi-pico/
-    break
-  elif [ "$pico" = "2" ]; then
-    echo "Flashing Slave to connected Pico"
-    sudo cp ./src/slave.uf2 /home/travis/rpi-pico/
-    break
-  elif [ "$pico" = "q" ]; then
-    echo "Exiting"
-    exit
-  else
-    echo "Incorrect choice. Try again."
-    sleep 1
-  fi
-done
+echo "Flashing Master by default, add --slave to flash Slave"
+if [ -z "$1" ]; then
+  echo 'Flashing Master to connected Pico'
+  sudo cp ./src/master.uf2 /home/travis/rpi-pico/
+elif [ "$1" = "--slave" ]; then
+  echo "Flashing Slave to connected Pico"
+  sudo cp ./src/slave.uf2 /home/travis/rpi-pico/
+else 
+  echo "Invalid argument. Use --slave to flash Slave firmware."
+  exit 1
+fi
 
 echo "Completed mounting and flashing Pico"
