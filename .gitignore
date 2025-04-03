@@ -5,6 +5,9 @@ firmware/.cache/*
 # Ignore kicad lockfiles
 *.lck
 
+# Ignore kicad backup files
+pcb/travyboard-backups/*
+
 .ccls-cache
 
 # Ignore mac bullshit

@@ -6,7 +6,7 @@
 	(paper "A4")
 	(lib_symbols)
 	(sheet
-		(at 76.2 63.5)
+		(at 20.32 22.86)
 		(size 63.5 63.5)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -22,7 +22,7 @@
 		)
 		(uuid "d4dd398f-8031-42f5-9517-3577efda2268")
 		(property "Sheetname" "Left Half"
-			(at 76.2 62.7884 0)
+			(at 20.32 22.1484 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -31,7 +31,7 @@
 			)
 		)
 		(property "Sheetfile" "left.kicad_sch"
-			(at 76.2 127.5846 0)
+			(at 20.32 86.9446 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -48,7 +48,7 @@
 		)
 	)
 	(sheet
-		(at 165.1 63.5)
+		(at 87.63 22.86)
 		(size 63.5 63.5)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -64,7 +64,7 @@
 		)
 		(uuid "e1af5821-a9f2-4c11-a90c-a7b17b38a2cb")
 		(property "Sheetname" "Right Half"
-			(at 165.1 62.7884 0)
+			(at 87.63 22.1484 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -73,7 +73,7 @@
 			)
 		)
 		(property "Sheetfile" "right.kicad_sch"
-			(at 165.1 127.5846 0)
+			(at 87.63 86.9446 0)
 			(effects
 				(font
 					(size 1.27 1.27)
