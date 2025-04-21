@@ -20,7 +20,7 @@
 #define LEFT_HALF 253
 #define RIGHT_HALF 254
 
-// LEGENDARY JADEN CROW SOLUTION
+// Struct for storing key press information
 struct KeyPress {
   uint8_t row;
   uint8_t col;
@@ -52,6 +52,7 @@ private:
 
   void refresh(void);
 
+  // SET CONNECTED PINS HERE
   constexpr static uint8_t LEFT_ROW_PINS[4] = {28, 11, 10, 9};
   constexpr static uint8_t LEFT_COLUMN_PINS[7] = {13, 14, 15, 26, 27, 12, 29};
   constexpr static uint8_t RIGHT_ROW_PINS[4] = {2, 3, 13, 15};

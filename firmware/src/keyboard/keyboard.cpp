@@ -58,6 +58,7 @@ KeyBoard::KeyBoard(const std::int8_t &name) {
   }
 }
 
+// Main hardware interaction for master half of keyboard
 void KeyBoard::scan_buttons() {
   // Poll every 1ms
   const uint32_t interval_ms = 1;
@@ -71,8 +72,9 @@ void KeyBoard::scan_buttons() {
 
   refresh(); // Refresh all static variables
 
-  handle_uart(); // Recieve and handle UART buffer
+  handle_uart(); // Recieve and handle UART buffer from slave half
 
+  // Scan the pins for the right half of keyboard
   // Loop over every row
   for (uint8_t row = 0; row < sizeof(KeyBoard::RIGHT_ROW_PINS); row++) {
     // Start scanning current row
@@ -256,6 +258,7 @@ void KeyBoard::send_keyboard_report(uint8_t layer) {
   }
 }
 
+// Main function for slave half of keyboard
 Keys KeyBoard::scan_pins(void) {
   // Poll every 1ms
   const uint32_t interval_ms = 1;
