@@ -25,13 +25,14 @@ keyboards with more features.
 
 ### TODO
 
-- Create modular halves (gaming optimized, cad optimized, etc). I would consider the first iteration vim/coding/desktop optimized
-- Add rotary encoder support
-- Add OLED support
-- Add mode changing support
-- Add led firmware and effects
-- Revise case to show RGB better
-- Add qmk support
+- [ ] Create modular halves (gaming optimized, cad optimized, etc). I would consider the first iteration vim/coding/desktop optimized
+- [ ] Add rotary encoder support
+- [ ] Add OLED support
+- [ ] Add mode changing support
+- [ ] Add led firmware and effects
+- [ ] Revise case to show RGB better
+- [x] Add qmk support
+    - [ ] Add via support
 
 ### Requirements for building
 
