@@ -21,7 +21,7 @@ keyboards with more features.
 - Split one way communication
 - Full keymap controlled by the master pico
 - 4 layers
-- WS2812 RGB LEDs on every key
+- ws2812 rgb leds on every key
 
 ### TODO
 
