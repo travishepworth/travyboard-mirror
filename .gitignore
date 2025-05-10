@@ -1,6 +1,8 @@
 # ignore build and cache directory
 firmware/build/*
 firmware/.cache/*
+firmware-v2/build/*
+firmware-v2/.cache/*
 
 # Ignore kicad lockfiles
 *.lck
