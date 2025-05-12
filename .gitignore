@@ -14,3 +14,4 @@ pcb/travyboard-backups/*
 
 # Ignore mac bullshit
 .DS_STORE
+firmware-v2/notes.md
