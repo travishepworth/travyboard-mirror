@@ -35,11 +35,11 @@ echo "Device $device mounted at /home/travis/rpi-pico/"
 
 echo "Flashing Master by default, add --slave to flash Slave"
 if [ -z "$1" ]; then
-  echo 'Flashing Master to connected Pico'
-  sudo cp ./src/master.uf2 /home/travis/rpi-pico/
+  echo 'Flashing sender to connected Pico'
+  sudo cp ./src/core/sender.uf2 /home/travis/rpi-pico/
 elif [ "$1" = "--slave" ]; then
   echo "Flashing Slave to connected Pico"
-  sudo cp ./src/slave.uf2 /home/travis/rpi-pico/
+  sudo cp ./src/core/receiver.uf2 /home/travis/rpi-pico/
 else 
   echo "Invalid argument. Use --slave to flash Slave firmware."
   exit 1
