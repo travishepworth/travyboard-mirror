@@ -16,6 +16,9 @@ typedef struct {
 // Function to initialize the matrix
 void matrix_init(void);
 
+// Function to clear the matrix state
+void matrix_clear(matrix_state_t *const state);
+
 // Function to read the state of the matrix
 void matrix_read(matrix_state_t *const state);
 

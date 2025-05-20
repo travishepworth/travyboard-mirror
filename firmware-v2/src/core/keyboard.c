@@ -3,22 +3,28 @@
 // Access them later with the memory address
 
 #include "keyboard.h"
+#include "class/hid/hid_device.h"
 #include "matrix.h"
 #include <pico/types.h>
 #include <stdint.h>
 #include <string.h>
 #include <keymap.h>
+#include "layer_processor.h"
+#include "usb_descriptors.h"
 
-void keyboard_init(keymap_modes_t *const modes, keymap_t *const keymap) {
+void keyboard_init(keymap_modes_t *const modes, keymap_t *const keymap, mod_keys_t *const layer_and_mode) {
   // Initialize the keyboard
   // Need layer and debouncing init too
-  void initialize_keymap_modes_type(keymap_modes_t *const modes);
-  void initialize_keymap_type(keymap_t *const keymap, keymap_modes_t *const modes);
-  void matrix_init();
+  initialize_keymap_modes_type(modes);
+  initialize_keymap_type(keymap, modes);
+  construct_keymaps(modes);
+  initialize_layers(layer_and_mode); // Initialize the layer and mode keys
+  matrix_init();
 }
 
-void process_matrix(keycode_report_t *report, keymap_t *const keymap) {
+void process_matrix(keycode_report_t *report, keymap_t *keymap, mod_keys_t *layer_and_mode) {
   matrix_state_t state;
+  matrix_clear(&state); // Clear the memory of the matrix state to be safe
 
   // For safety; check for a null pointer
   if (report == NULL) {
@@ -31,6 +37,7 @@ void process_matrix(keycode_report_t *report, keymap_t *const keymap) {
 
   // Get a scan of the matrix
   matrix_read(&state);
+  set_layer_and_mode(&state, keymap, layer_and_mode);
 
   // TODO, apply debouncing and layer handing
 
@@ -51,5 +58,11 @@ void process_matrix(keycode_report_t *report, keymap_t *const keymap) {
   }
 }
 
-void send_keyboard_report(keycode_report_t *report) {
+void send_keyboard_report(keycode_report_t *const report) {
+  if (tud_hid_ready()) {
+    // Send the report to the host
+    tud_hid_keyboard_report(REPORT_ID_KEYBOARD, 0, report->keycodes);
+  }
+  memcpy(report->previous_keycodes, report->keycodes, MAX_KEYCODES);
+  memset(report->keycodes, 0, MAX_KEYCODES); // Clear the keycodes for the next report
 }

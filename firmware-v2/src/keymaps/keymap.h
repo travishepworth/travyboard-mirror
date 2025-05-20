@@ -25,6 +25,8 @@ void initialize_keymap_modes_type(keymap_modes_t *const modes);
 
 void initialize_keymap_type(keymap_t *const keymap, keymap_modes_t *const modes);
 
+void construct_keymaps(keymap_modes_t *const modes);
+
 uint8_t return_keycode(keymap_t *const keymap, uint8_t row, uint8_t col);
 
 #endif // KEYMAP_H

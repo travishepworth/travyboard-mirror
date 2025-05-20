@@ -5,6 +5,7 @@
 #include <pico/time.h>
 #include <pico/types.h>
 #include <stdint.h>
+#include <string.h>
 #include "matrix.h"
 
 static const uint row_pins[MATRIX_ROWS] = {0, 1, 2, 3}; // GPIO pins for rows
@@ -23,6 +24,11 @@ void matrix_init(void) {
     gpio_set_dir(pin_index, GPIO_IN);
     gpio_pull_up(pin_index);
   }
+};
+
+void matrix_clear(matrix_state_t *const state) {
+  // Clear the matrix state
+  memset(state->state, 0, sizeof(state->state));
 };
 
 void matrix_read(matrix_state_t *const state) {
