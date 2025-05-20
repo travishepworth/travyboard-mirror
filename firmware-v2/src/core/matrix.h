@@ -17,6 +17,6 @@ typedef struct {
 void matrix_init(void);
 
 // Function to read the state of the matrix
-void matrix_read(matrix_state_t *state);
+void matrix_read(matrix_state_t *const state);
 
 #endif // MATRIX_H

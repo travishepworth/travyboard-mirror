@@ -1,9 +1,11 @@
 add_executable(sender)
 target_include_directories(
   sender PUBLIC ${CMAKE_CURRENT_LIST_DIR} ${CMAKE_CURRENT_LIST_DIR}/../tusb
-                ${CMAKE_CURRENT_LIST_DIR}/../transport)
-target_sources(sender PUBLIC sender.cpp 
-  ${CMAKE_CURRENT_LIST_DIR}/../transport/usb_descriptors.c)
+                ${CMAKE_CURRENT_LIST_DIR}/../transport
+                ${CMAKE_CURRENT_LIST_DIR}/../keymaps)
+target_sources(sender PUBLIC sender.c 
+  ${CMAKE_CURRENT_LIST_DIR}/../transport/usb_descriptors.c
+  ${CMAKE_CURRENT_LIST_DIR}/../keymaps/keymap.c)
 target_link_libraries(
   sender
   PUBLIC pico_stdlib
@@ -18,9 +20,11 @@ pico_add_extra_outputs(sender)
 add_executable(receiver)
 target_include_directories(
   receiver PUBLIC ${CMAKE_CURRENT_LIST_DIR} ${CMAKE_CURRENT_LIST_DIR}/../tusb
-                ${CMAKE_CURRENT_LIST_DIR}/../transport)
-target_sources(receiver PUBLIC receiver.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/../transport/usb_descriptors.c)
+                ${CMAKE_CURRENT_LIST_DIR}/../transport
+                ${CMAKE_CURRENT_LIST_DIR}/../keymaps)
+target_sources(receiver PUBLIC receiver.c
+  ${CMAKE_CURRENT_LIST_DIR}/../transport/usb_descriptors.c
+  ${CMAKE_CURRENT_LIST_DIR}/../keymaps/keymap.c)
 target_link_libraries(
   receiver
   PUBLIC pico_stdlib

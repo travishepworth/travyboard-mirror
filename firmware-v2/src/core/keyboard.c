@@ -7,14 +7,17 @@
 #include <pico/types.h>
 #include <stdint.h>
 #include <string.h>
+#include <keymap.h>
 
-void keyboard_init(void) {
+void keyboard_init(keymap_modes_t *const modes, keymap_t *const keymap) {
   // Initialize the keyboard
   // Need layer and debouncing init too
-  matrix_init();
+  void initialize_keymap_modes_type(keymap_modes_t *const modes);
+  void initialize_keymap_type(keymap_t *const keymap, keymap_modes_t *const modes);
+  void matrix_init();
 }
 
-void process_matrix(keycode_report_t *report) {
+void process_matrix(keycode_report_t *report, keymap_t *const keymap) {
   matrix_state_t state;
 
   // For safety; check for a null pointer
@@ -37,13 +40,16 @@ void process_matrix(keycode_report_t *report) {
       // Read byte stored in memory
       if (state.state[row][col]) {
         // Get keycode from keymap
-        uint8_t *keycode = NULL;
-        if (keycode != NULL && report->count < MAX_KEYCODES) {
+        uint8_t keycode = return_keycode(keymap, row, col);
+        if (keycode != 0 && report->count < MAX_KEYCODES) {
           // Update keycode to index of count
-          report->keycodes[report->count] = *keycode;
+          report->keycodes[report->count] = keycode;
           report->count++; // Increment count
         }
       }
     }
   }
+}
+
+void send_keyboard_report(keycode_report_t *report) {
 }

@@ -23,10 +23,9 @@ void matrix_init(void) {
     gpio_set_dir(pin_index, GPIO_IN);
     gpio_pull_up(pin_index);
   }
-
 };
 
-void matrix_read(matrix_state_t *state) {
+void matrix_read(matrix_state_t *const state) {
   // Perform a scan of the matrix
   // We will pull row pins high, then read 
   for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
