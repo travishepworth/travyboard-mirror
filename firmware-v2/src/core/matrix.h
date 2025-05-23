@@ -3,6 +3,7 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
+#include <stdbool.h>
 #include <stdint.h>
 
 #define MATRIX_ROWS 4 // Number of rows in the matrix
@@ -10,7 +11,9 @@
 
 // Define a struct to hold the state of the matrix
 typedef struct {
-  uint8_t state[MATRIX_ROWS][MATRIX_COLS]; // 4x4 matrix
+  bool state[MATRIX_ROWS * MATRIX_COLS]; // Hardware state
+  uint8_t activated_keys[MATRIX_ROWS * MATRIX_COLS];
+  uint8_t total_activated_keys;
 } matrix_state_t;
 
 // Function to initialize the matrix
@@ -21,5 +24,8 @@ void matrix_clear(matrix_state_t *const state);
 
 // Function to read the state of the matrix
 void matrix_read(matrix_state_t *const state);
+
+// Get an array of indices of pressed keys
+void matrix_convert(matrix_state_t *const state);
 
 #endif // MATRIX_H
