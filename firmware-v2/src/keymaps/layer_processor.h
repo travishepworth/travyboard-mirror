@@ -2,7 +2,6 @@
 #define LAYER_PROCESSOR_H
 
 #include "keymap.h"
-#include "matrix.h"
 #include <stdbool.h>
 #include <stdint.h>
 
@@ -26,10 +25,7 @@
 
 typedef struct {
   uint8_t layer_keycodes[NUM_POSSIBLE_LAYERS];
-  uint8_t mode_keycodes[NUM_POSSIBLE_MODES];
-  uint8_t held_layers[NUM_POSSIBLE_LAYERS];
-  uint8_t held_modes[NUM_POSSIBLE_MODES];
-} mod_keys_t;
+} layer_keys_t;
 
 typedef enum {
   SET_LAYER,
@@ -37,12 +33,10 @@ typedef enum {
   SET_NONE
 } layer_mode_t;
 
-void initialize_layers(mod_keys_t *const layer);
+void initialize_layers(layer_keys_t *const layer);
 
-layer_mode_t check_and_store_layer_mode(mod_keys_t *const layer, keymap_t *const keymap, uint8_t row, uint8_t col, int layer_index, int mode_index);
+void store_layer_indices(keymap_t *const keymap, layer_keys_t *const layer_info);
 
-void set_layer_and_mode(matrix_state_t *const state, keymap_t *keymap, mod_keys_t *const layer);
-
-void return_layer();
+uint8_t return_layer(matrix_state_t const *const state, layer_indices_t *const layer_indices);
 
 #endif // LAYER_PROCESSOR_H
