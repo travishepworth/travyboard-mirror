@@ -8,7 +8,7 @@
 #define NUM_MODES 6
 
 typedef struct {
-  uint8_t modes_all[NUM_MODES][MAX_NUM_LAYERS][MATRIX_ROWS][MATRIX_COLS];
+  uint8_t modes_all[NUM_MODES][MAX_NUM_LAYERS][TOTAL_ROWS][TOTAL_COLS];
 } keymap_modes_t;
 
 typedef struct {
@@ -22,18 +22,17 @@ typedef struct {
 } layer_indices_t ;
 
 typedef struct {
-  uint8_t full_keymap[MAX_NUM_LAYERS][MATRIX_COLS * MATRIX_ROWS]; // Fully flat may be better but I like multi-dimensional arrays
-  uint8_t (*active_keymap)[MATRIX_COLS * MATRIX_ROWS]; // Pointer to current layer
+  uint8_t full_keymap[MAX_NUM_LAYERS][TOTAL_COLS * TOTAL_ROWS]; // Fully flat may be better but I like multi-dimensional arrays
+  uint8_t *active_keymap; // Pointer to current layer
   layer_indices_t layer_indices;
 } keymap_t;
 
-
-void initialize_keymap_modes_type(keymap_modes_t *const modes);
-
-void initialize_keymap_type(keymap_t *const keymap);
+void initialize_keymap_t(keymap_t *const keymap);
 
 void construct_keymap(keymap_t *const keymap);
 
-uint8_t return_keycode(keymap_t *const keymap, uint8_t index);
+void initialize_keymaps(keymap_t *const keymap);
+
+void set_layer(keymap_t *const keymap, uint8_t layer);
 
 #endif // KEYMAP_H
