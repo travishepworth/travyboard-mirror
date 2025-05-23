@@ -35,7 +35,7 @@ void initialize_layers(layer_keys_t *const layer) {
 }
 
 // This took awhile to come too, but I think it is pretty good now
-void store_layer_indecies(keymap_t *const keymap, layer_keys_t const *const layer_info) {
+void store_layer_indices(keymap_t *const keymap, layer_keys_t const *const layer_info) {
   // Set pointer for readability
   layer_index_t *keycode_indices;
 
