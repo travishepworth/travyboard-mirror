@@ -10,7 +10,7 @@ target_sources(right_half PUBLIC right_half.c
   ${CMAKE_CURRENT_LIST_DIR}/../../core/matrix.c
   ${CMAKE_CURRENT_LIST_DIR}/../../keymaps/keymap.c
   ${CMAKE_CURRENT_LIST_DIR}/../../keymaps/layer_processor.c
-  ${CMAKE_CURRENT_LIST_DIR}/../../keymaps/keymap_files/default.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../keymaps/keymap_files/right_only.c
   ${CMAKE_CURRENT_LIST_DIR}/../../transport/usb_descriptors.c)
 target_link_libraries(
   right_half

@@ -4,6 +4,7 @@
 #include "class/hid/hid_device.h"
 #include <hardware/uart.h>
 
+#include "debounce.h"
 #include "tusb.h"
 #include "usb_descriptors.h"
 
@@ -33,6 +34,8 @@ int main() {
 
   // Initialize the keyboard
   keyboard_init(&keymap, &layer_info);
+  debounce_state_t debounce;
+
 
   // Process logic
   while (1) {
@@ -46,6 +49,7 @@ int main() {
     // with the halves translating accordingly
     //
     // Thinking probably something to merge the uart calls.
+    
     process_matrix(&report, &keymap);
     send_keyboard_report(&report);
   }
