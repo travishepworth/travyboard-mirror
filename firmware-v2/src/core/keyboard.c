@@ -32,6 +32,7 @@ void set_keycodes(keymap_t const *const keymap, keycode_report_t *const report, 
 void process_matrix(keycode_report_t *report, keymap_t *keymap) {
   matrix_state_t state;
   matrix_clear(&state); // Clear the memory of the matrix state to be safe
+  
 
   // Clear last report by setting memory to 0
   memset(report->keycodes, 0, MAX_KEYCODES);
