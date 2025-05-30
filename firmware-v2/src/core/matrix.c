@@ -11,8 +11,8 @@
 
 // These will be defined elsewhere in the code, keeping them here for
 // lsp sanity for now
-static const uint row_pins[TOTAL_ROWS] = {0, 1, 2, 3}; // GPIO pins for rows
-static const uint col_pins[TOTAL_COLS] = {4, 5, 6, 7}; // GPIO pins for columns
+static const uint row_pins[TOTAL_ROWS] = {2, 3, 13, 15}; // GPIO pins for rows
+static const uint col_pins[TOTAL_COLS] = {4, 7, 8, 9, 10, 11, 12}; // GPIO pins for columns
 
 void matrix_init(void) {
   // Init the row pins; set them to output
@@ -25,13 +25,15 @@ void matrix_init(void) {
   for (uint8_t pin_index = 0; pin_index < TOTAL_COLS; pin_index++) {
     gpio_init(col_pins[pin_index]);
     gpio_set_dir(col_pins[pin_index], GPIO_IN);
-    gpio_pull_up(col_pins[pin_index]);
+    gpio_pull_down(col_pins[pin_index]);
   }
 };
 
 void matrix_clear(matrix_state_t *const state) {
   // Clear the matrix state
   memset(state->state, 0, sizeof(state->state));
+  memset(state->activated_keys, 0, sizeof(state->activated_keys));
+  state->total_activated_keys = 0;
 };
 
 // This is the only function that actually interacts with hardware
