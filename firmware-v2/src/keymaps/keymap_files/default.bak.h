@@ -4,8 +4,8 @@
 
 #include <stdint.h>
 enum KEYMAP_TOTALS {
-  TOTAL_ROWS = 4, // Total rows for the entire keyboard (double if split)
-  TOTAL_COLS = 7,
+  TOTAL_ROWS = 8, // Total rows for the entire keyboard (double if split)
+  TOTAL_COLS = 14,
   TOTAL_LAYERS = 4, // Total layers on this keymap
 };
 
