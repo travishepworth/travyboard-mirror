@@ -4,7 +4,6 @@
 #include "class/hid/hid_device.h"
 #include <hardware/uart.h>
 
-#include "debounce.h"
 #include "tusb.h"
 #include "usb_descriptors.h"
 
@@ -18,28 +17,33 @@ enum {
   BLINK_SUSPENDED = 2500,  // device is suspended
 };
 
+void led_blinking_task(void); // define function prototype
+
 static uint32_t blink_interval_ms = BLINK_NOT_MOUNTED;
 
+static keymap_t keymap;
+static layer_keys_t layer_info;
+static keycode_report_t report;
 
-int main() {
+int main(void) {
   // Init libraries
   board_init();
   tusb_init();
   // uart_init();
+  printf("Right Half Keyboard\n");
 
   // Create required sctructs
-  keymap_t keymap;
-  layer_keys_t layer_info;
-  keycode_report_t report;
 
   // Initialize the keyboard
   keyboard_init(&keymap, &layer_info);
-  debounce_state_t debounce;
 
 
   // Process logic
-  while (1) {
+  while (true) {
     tud_task(); // TinyUSB task
+
+    const uint32_t interval_ms = 1;
+    static uint32_t start_ms = 0;
 
     // Todo, almost a complete setup for a single keyboard
     // Implement debounce, key sending
@@ -49,10 +53,19 @@ int main() {
     // with the halves translating accordingly
     //
     // Thinking probably something to merge the uart calls.
-    
+
+    // Poll every 1ms
+
+    // Check for time since last poll
+    if (board_millis() - start_ms < interval_ms) {
+      continue; // not enough time
+    }
+    start_ms += interval_ms;
+
     process_matrix(&report, &keymap);
     send_keyboard_report(&report);
   }
+  return 0;
 };
 
 // TODO: move to tusb.c
@@ -138,3 +151,22 @@ void tud_suspend_cb(bool remote_wakeup_en) {
 // Invoked when usb bus is resumed
 void tud_resume_cb(void) { blink_interval_ms = BLINK_MOUNTED; }
 
+//--------------------------------------------------------------------+
+// BLINKING TASK
+//--------------------------------------------------------------------+
+void led_blinking_task(void) {
+  static uint32_t start_ms = 0;
+  static bool led_state = false;
+
+  // blink is disabled
+  if (!blink_interval_ms)
+    return;
+
+  // Blink every interval ms
+  if (board_millis() - start_ms < blink_interval_ms)
+    return; // not enough time
+  start_ms += blink_interval_ms;
+
+  board_led_write(led_state);
+  led_state = 1 - led_state; // toggle
+}
