@@ -4,12 +4,11 @@
 #include "default.h"
 #include "matrix.h"
 
-#define MAX_NUM_LAYERS 8
 #define NUM_MODES 6
 
-typedef struct {
-  uint8_t modes_all[NUM_MODES][MAX_NUM_LAYERS][TOTAL_ROWS][TOTAL_COLS];
-} keymap_modes_t;
+// typedef struct {
+//   uint8_t modes_all[NUM_MODES][TOTAL_LAYERS][TOTAL_ROWS][TOTAL_COLS];
+// } keymap_modes_t;
 
 typedef struct {
   uint8_t index[TOTAL_ROWS * TOTAL_COLS];
@@ -17,12 +16,12 @@ typedef struct {
 } layer_index_t;
 
 typedef struct {
-  layer_index_t matrix_index[MAX_NUM_LAYERS]; 
-  uint8_t keycode[MAX_NUM_LAYERS];
+  layer_index_t matrix_index[TOTAL_LAYERS]; 
+  uint8_t keycode[TOTAL_LAYERS];
 } layer_indices_t ;
 
 typedef struct {
-  uint8_t full_keymap[MAX_NUM_LAYERS][TOTAL_COLS * TOTAL_ROWS]; // Fully flat may be better but I like multi-dimensional arrays
+  uint8_t full_keymap[TOTAL_LAYERS][TOTAL_COLS * TOTAL_ROWS]; // Fully flat may be better but I like multi-dimensional arrays
   uint8_t *active_keymap; // Pointer to current layer
   layer_indices_t layer_indices;
 } keymap_t;
