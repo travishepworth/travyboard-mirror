@@ -60,23 +60,25 @@ void store_layer_indices(keymap_t *const keymap, layer_keys_t const *const layer
   }
 }
 
-// I perfer ensuring my layers stack, others may want a dedicated layer 4 key. This is more effecient scanning though so
-// I will require layer key 1 to be hit for layer 2 to able to be activated
 uint8_t return_layer(matrix_state_t const *const state, layer_indices_t *const layer_indices) {
-  // Loop through all stored keycodes
-  for (uint8_t layer = 0; layer < MAX_NUM_LAYERS; layer++) {
-    // Loop through activated indices
-    for (uint8_t activated_index = 0; activated_index < state->total_activated_keys; activated_index++) {
-      // loop through stored indices mapped at each keycode
+  uint8_t highest_layer = 0; // Default to layer 0
+
+  // Loop through all activated keys
+  for (uint8_t activated_index = 0; activated_index < state->total_activated_keys; activated_index++) {
+    uint8_t key_index = state->activated_keys[activated_index];
+    
+    // Check each layer for a matching index
+    for (uint8_t layer = 0; layer < NUM_POSSIBLE_LAYERS; layer++) {
       for (uint8_t stored_index = 0; stored_index < layer_indices->matrix_index[layer].total; stored_index++) {
-        if (layer_indices->matrix_index[layer].index[stored_index] == state->activated_keys[activated_index]) {
-          goto next_layer;
+        if (layer_indices->matrix_index[layer].index[stored_index] == key_index) {
+          // Update highest_layer if this layer is higher
+          if (layer > highest_layer) {
+            highest_layer = layer;
+          }
+          break; // Found a match in this layer, move to next key
         }
       }
     }
-    return layer;
-  next_layer:
-    continue;
   }
-  return MAX_NUM_LAYERS;
+  return highest_layer;
 }
