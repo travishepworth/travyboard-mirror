@@ -9,6 +9,8 @@
 
 #include "keyboard.h"
 #include "keymap.h"
+#include "matrix.h"
+#include "uart.h"
 
 // Blink pattern
 enum {
@@ -28,15 +30,12 @@ static keycode_report_t report;
 int main(void) {
   // Init libraries
   board_init();
+  // initialize_uart();
   tusb_init();
-  // uart_init();
-  printf("Right Half Keyboard\n");
 
   // Create required sctructs
-
   // Initialize the keyboard
   keyboard_init(&keymap, &layer_info);
-
 
   // Process logic
   while (true) {

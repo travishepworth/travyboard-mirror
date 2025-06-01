@@ -39,9 +39,9 @@ void store_layer_indices(keymap_t *const keymap, layer_keys_t const *const layer
   // Set pointer for readability
   layer_index_t *keycode_indices;
 
-  for (uint8_t layer = 0; layer < NUM_POSSIBLE_LAYERS; layer++) {
+  for (uint8_t layer = 0; layer < TOTAL_LAYERS; layer++) {
     for (uint8_t matrix_index = 0; matrix_index < (TOTAL_COLS * TOTAL_ROWS); matrix_index++) {
-      for (uint8_t code = 0; code < NUM_POSSIBLE_LAYERS; code++) {
+      for (uint8_t code = 0; code < TOTAL_LAYERS; code++) {
         if (layer_info->layer_keycodes[code] == keymap->full_keymap[layer][matrix_index]) {
 
           // Prevent re-writing the keycode
@@ -64,12 +64,12 @@ uint8_t return_layer(matrix_state_t const *const state, layer_indices_t *const l
   uint8_t highest_layer = 0; // Default to layer 0
 
   // Loop through all activated keys
-  for (uint8_t activated_index = 0; activated_index < state->total_activated_keys; activated_index++) {
+  for (uint8_t activated_index = 0; activated_index < state->total_activated_keys; ++activated_index) {
     uint8_t key_index = state->activated_keys[activated_index];
     
     // Check each layer for a matching index
-    for (uint8_t layer = 0; layer < NUM_POSSIBLE_LAYERS; layer++) {
-      for (uint8_t stored_index = 0; stored_index < layer_indices->matrix_index[layer].total; stored_index++) {
+    for (uint8_t layer = 0; layer < TOTAL_LAYERS; ++layer) {
+      for (uint8_t stored_index = 0; stored_index < layer_indices->matrix_index[layer].total; ++stored_index) {
         if (layer_indices->matrix_index[layer].index[stored_index] == key_index) {
           // Update highest_layer if this layer is higher
           if (layer > highest_layer) {

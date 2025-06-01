@@ -2,6 +2,7 @@
 #define LAYER_PROCESSOR_H
 
 #include "keymap.h"
+#include "matrix.h"
 #include <stdbool.h>
 #include <stdint.h>
 

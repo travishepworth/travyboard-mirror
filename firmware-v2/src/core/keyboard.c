@@ -18,6 +18,7 @@ void keyboard_init(keymap_t *const keymap,
   initialize_keymaps(keymap);
   initialize_layers(layer_info);
   store_layer_indices(keymap, layer_info);
+  select_matrix_backend();
   matrix_init(); // Init gpio pins for reading and writing
 }
 
@@ -31,14 +32,17 @@ void set_keycodes(keymap_t const *const keymap, keycode_report_t *const report, 
 
 void process_matrix(keycode_report_t *report, keymap_t *keymap) {
   matrix_state_t state;
+  matrix_state_t right_state;
   matrix_clear(&state); // Clear the memory of the matrix state to be safe
+  matrix_clear(&right_state); // Clear the memory of the matrix state to be safe
   
 
   // Clear last report by setting memory to 0
   memset(report->keycodes, 0, MAX_KEYCODES);
   report->count = 0;
 
-  matrix_read(&state); // Scan matrix
+  matrix_read(&right_state); // Scan matrix, set depending on split or single
+  matrix_concatenate(&state, &right_state); // Concatenate the two halves of the matrix if split
   matrix_convert(&state); // Extract array of indices from scan
 
   set_layer(keymap, return_layer(&state, &keymap->layer_indices));

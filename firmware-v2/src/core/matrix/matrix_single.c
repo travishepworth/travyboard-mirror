@@ -1,20 +1,20 @@
 // travmonkey
 // Define functions to read keyboard matrix
 
-#include <hardware/gpio.h>
 #include <pico/time.h>
 #include <pico/types.h>
 #include <stddef.h>
 #include <stdint.h>
-#include <string.h>
 #include "matrix.h"
+#include <hardware/gpio.h>
 
 // These will be defined elsewhere in the code, keeping them here for
 // lsp sanity for now
+// TODO, make this support split keyboards (even scuffed fow now)
 static const uint row_pins[TOTAL_ROWS] = {2, 3, 13, 15}; // GPIO pins for rows
 static const uint col_pins[TOTAL_COLS] = {4, 7, 8, 9, 10, 11, 12}; // GPIO pins for columns
 
-void matrix_init(void) {
+void matrix_init_single(void) {
   // Init the row pins; set them to output
   for (uint8_t pin_index = 0; pin_index < TOTAL_ROWS; pin_index++) {
     gpio_init(row_pins[pin_index]);
@@ -29,16 +29,7 @@ void matrix_init(void) {
   }
 };
 
-void matrix_clear(matrix_state_t *const state) {
-  // Clear the matrix state
-  memset(state->state, 0, sizeof(state->state));
-  memset(state->activated_keys, 0, sizeof(state->activated_keys));
-  state->total_activated_keys = 0;
-};
-
-// This is the only function that actually interacts with hardware
-// It must be as optimized as possible.
-void matrix_read(matrix_state_t *const state) {
+void matrix_read_single(matrix_state_t *const state) {
   // Row doesn't matter, but setting column here instead of in the loop is ideal
   uint8_t row;
   uint8_t col;
@@ -57,19 +48,3 @@ void matrix_read(matrix_state_t *const state) {
     gpio_put(row_pins[row], 0);
   }
 };
-
-void matrix_convert(matrix_state_t *const state) {
-  for (uint8_t matrix_index = 0; matrix_index < (TOTAL_ROWS * TOTAL_COLS); matrix_index++) {
-    if (state->state[matrix_index]) {
-      state->activated_keys[state->total_activated_keys++] = matrix_index;
-    }
-  }
-}
-
-void matrix_trim(matrix_state_t *const state) {
-  if (state->total_activated_keys > 6) {
-    size_t array_size = TOTAL_ROWS * TOTAL_COLS;
-    memset(&state->activated_keys[6], 0, (array_size - 6) * sizeof(uint8_t)); // Might as well clear to the end
-    state->total_activated_keys = 6; // Max keys for key report
-  }
-}
