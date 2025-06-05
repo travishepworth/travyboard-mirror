@@ -1,48 +1,62 @@
 #!/usr/bin/env bash
 
-working_dir=$(pwd)
-echo "Attempting to build the project"
-cd "$working_dir/build" || {
-  echo "No build directory found ... exiting"
-  exit
-}
+set -e
 
-if cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ..; then
-  if make; then
-    echo "Project built successfully"
-  else
-    echo "Make failed, check the configuration and logs"
-    exit
-  fi
-else
-  echo "Cmake failed, check the configuration and logs"
-  exit
+# Ensure script is run with sudo
+if [ "$EUID" -ne 0 ]; then
+  echo "This script must be run with sudo. Please re-run with: sudo $0 [--slave] [--clean|-c]"
+  exit 1
 fi
 
-# Find the device with the specified disk name
+working_dir=$(pwd)
+build_dir="$working_dir/build"
+mount_point="/home/travmonkey/rpi-pico"
+
+echo "Attempting to build the project"
+
+# Check for --clean or -c flag
+if [[ "$@" =~ (--clean|-c) ]]; then
+  echo "Cleaning build directory..."
+  rm -rf "$build_dir"
+fi
+
+mkdir -p "$build_dir"
+cd "$build_dir" || {
+  echo "Failed to access build directory"
+  exit 1
+}
+
+# Run CMake and Make
+if cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON .. && make; then
+  echo "Project built successfully"
+else
+  echo "Build failed"
+  exit 1
+fi
+
+# Find RP2040 device
 echo "Searching for a connected Pico"
 device=$(lsblk -o NAME,MODEL | grep "RP2" | awk '{print $1}')
 
-# Exit if no RPico is found
 if [ -z "$device" ]; then
   echo "Device RP2 not found"
   exit 1
 fi
 
-echo "Pico found:"
-sudo mount /dev/"$device"1 /home/travmonkey/rpi-pico
-echo "Device $device mounted at /home/travmonkey/rpi-pico/"
+echo "Pico found: $device"
 
-echo "Flashing Master by default, add --slave to flash Slave"
-if [ -z "$1" ]; then
-  echo 'Flashing master to connected Pico'
-  sudo cp ./src/devices/right_half/right_half.uf2 /home/travmonkey/rpi-pico/
-elif [ "$1" = "--slave" ]; then
-  echo "Flashing Slave to connected Pico"
-  sudo cp ./src/core/receiver.uf2 /home/travmonkey/rpi-pico/
-else 
-  echo "Invalid argument. Use --slave to flash Slave firmware."
-  exit 1
+mount_path="/dev/${device}1"
+echo "Mounting $mount_path to $mount_point"
+mkdir -p "$mount_point"
+mount "$mount_path" "$mount_point"
+
+# Determine whether to flash master or slave
+if [[ "$@" =~ (--slave) ]]; then
+  echo "Flashing slave to connected Pico"
+  cp ./src/devices/left_half/left_half.uf2 "$mount_point/"
+else
+  echo "Flashing master to connected Pico"
+  cp ./src/devices/right_half/right_half.uf2 "$mount_point/"
 fi
 
 echo "Completed mounting and flashing Pico"
