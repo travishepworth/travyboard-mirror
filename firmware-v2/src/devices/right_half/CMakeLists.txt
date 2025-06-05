@@ -8,6 +8,7 @@ target_include_directories(
                 ${CMAKE_CURRENT_LIST_DIR}/../../keymaps/keymap_files)
 target_sources(right_half PUBLIC right_half.c 
   ${CMAKE_CURRENT_LIST_DIR}/../../core/keyboard.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../core/debounce.c
   ${CMAKE_CURRENT_LIST_DIR}/../../core/matrix/matrix.c
   ${CMAKE_CURRENT_LIST_DIR}/../../core/matrix/matrix_single.c
   ${CMAKE_CURRENT_LIST_DIR}/../../core/matrix/matrix_split.c
