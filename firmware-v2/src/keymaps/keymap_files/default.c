@@ -1,31 +1,52 @@
 #include "default.h"
-#include "class/hid/hid.h"
-#include "layer_processor.h"
+#include "keymap_shorthands.h"
 
-// TODO: Make this readable
 const uint8_t keymap_default[TOTAL_LAYERS][TOTAL_ROWS_HALF][TOTAL_COLS] = {
   {
-    {HID_KEY_TAB, HID_KEY_Q, HID_KEY_W, HID_KEY_E, HID_KEY_R, HID_KEY_T,'\0' ,'\0', HID_KEY_Y, HID_KEY_U, HID_KEY_I, HID_KEY_O, HID_KEY_P, HID_KEY_BACKSPACE},
-    {HID_KEY_SHIFT_LEFT, HID_KEY_A, HID_KEY_S, HID_KEY_D, HID_KEY_F, HID_KEY_G,'\0' ,'\0', HID_KEY_H, HID_KEY_J, HID_KEY_K, HID_KEY_L, HID_KEY_SEMICOLON, HID_KEY_ENTER},
-    {HID_KEY_CONTROL_LEFT, HID_KEY_Z, HID_KEY_X, HID_KEY_C, HID_KEY_V, HID_KEY_B,'\0' ,'\0', HID_KEY_N, HID_KEY_M, HID_KEY_COMMA, HID_KEY_PERIOD, HID_KEY_SLASH, HID_KEY_SHIFT_RIGHT},
-    {'\0', '\0', '\0', '\0', '\0', 1,'\0' ,'\0', HID_KEY_SPACE, LAYER_KEY_M01, '\0','\0','\0','\0'},
+  // |--------|--------|--------|--------|--------|--------|--------|  |--------|--------|--------|--------|--------|--------|--------|
+     {KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_NO,      KC_NO,   KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC},
+  // |--------|--------|--------|--------|--------|--------|--------|  |--------|--------|--------|--------|--------|--------|--------|
+     {KC_LSFT, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_NO,      KC_NO,   KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_ENT},
+  // |--------|--------|--------|--------|--------|--------|--------|  |--------|--------|--------|--------|--------|--------|--------|
+     {KC_LCTL, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_NO,      KC_NO,   KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT},
+  // |--------|--------|--------|--------|--------|--------|                   |--------|--------|--------|--------|--------|--------|
+     {KC_NO,   KC_NO,   KC_NO,   KC_LGUI, KC_M01,  KC_SPC,  KC_NO,      KC_NO,  KC_SPC,  KC_M02,  KC_LALT, KC_NO,   KC_NO,   KC_NO},
+  //                            |--------|--------|--------|                   |--------|--------|--------|
   },
+
   {
-    {HID_KEY_ESCAPE, HID_KEY_1, HID_KEY_2, HID_KEY_3, HID_KEY_4, HID_KEY_5,'\0' ,'\0', HID_KEY_6, HID_KEY_7, HID_KEY_8, HID_KEY_9, HID_KEY_0, HID_KEY_MINUS},
-    {HID_KEY_SHIFT_LEFT, HID_KEY_F1, HID_KEY_F2, HID_KEY_F3, HID_KEY_F4, HID_KEY_F5,'\0' ,'\0', HID_KEY_ARROW_LEFT, HID_KEY_ARROW_DOWN, HID_KEY_ARROW_UP, HID_KEY_ARROW_RIGHT, HID_KEY_APOSTROPHE, '\0'},
-    {HID_USAGE_CONSUMER_BRIGHTNESS_DECREMENT,HID_USAGE_CONSUMER_BRIGHTNESS_INCREMENT,HID_USAGE_CONSUMER_SCAN_PREVIOUS,HID_USAGE_CONSUMER_SCAN_NEXT,HID_USAGE_CONSUMER_PLAY_PAUSE,'\0','\0' ,'\0', '\0', '\0', '\0', '\0', '\0','\0'},
-    {'\0', '\0', '\0', '\0', '\0', '\0','\0' ,'\0', '\0', '\0', '\0','\0','\0','\0'},
+  // |--------|--------|--------|--------|--------|--------|--------|  |--------|--------|--------|--------|--------|--------|--------|
+     {KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_NO,      KC_NO,   KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS},
+  // |--------|--------|--------|--------|--------|--------|--------|  |--------|--------|--------|--------|--------|--------|--------|
+     {KC_LSFT, KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_NO,      KC_NO,   KC_LEFT, KC_DOWN, KC_UP,   KC_RIGHT,KC_QUOT, KC_ENT},
+  // |--------|--------|--------|--------|--------|--------|--------|  |--------|--------|--------|--------|--------|--------|--------|
+     {KC_LCTL, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_NO,      KC_NO,   KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT},
+  // |--------|--------|--------|--------|--------|--------|                   |--------|--------|--------|--------|--------|--------|
+     {KC_NO,   KC_NO,   KC_NO,   KC_LGUI, KC_M01,  KC_SPC,  KC_NO,      KC_NO,  KC_SPC,  KC_M03,  KC_LALT, KC_NO,   KC_NO,   KC_NO},
+  //                            |--------|--------|--------|                   |--------|--------|--------|
   },
+
   {
-    {HID_KEY_GRAVE, HID_KEY_1, HID_KEY_2, HID_KEY_3, HID_KEY_4, HID_KEY_5,'\0' ,'\0', HID_KEY_6, HID_KEY_7, HID_KEY_BACKSLASH, HID_KEY_BRACKET_LEFT, HID_KEY_BRACKET_RIGHT, HID_KEY_EQUAL},
-    {'\0', '\0', '\0', '\0', '\0', '\0','\0' ,'\0', HID_KEY_HOME, HID_KEY_INSERT, HID_KEY_END, HID_KEY_DELETE, '\0', HID_KEY_F12},
-    {'\0', '\0', '\0', '\0', '\0', '\0','\0' ,'\0', '\0', '\0', '\0', '\0', '\0','\0'},
-    {'\0', '\0', '\0', '\0', '\0', '\0','\0' ,'\0', '\0', '\0', '\0','\0','\0','\0'},
+  // |--------|--------|--------|--------|--------|--------|--------|  |--------|--------|--------|--------|--------|--------|--------|
+     {KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_NO,      KC_NO,   KC_6,    KC_7,    KC_BSLS, KC_LBRC, KC_RBRC, KC_EQL},
+  // |--------|--------|--------|--------|--------|--------|--------|  |--------|--------|--------|--------|--------|--------|--------|
+     {KC_LSFT, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_NO,      KC_NO,   KC_HOME, KC_INS,  KC_DEL,  KC_END,  KC_SCLN, KC_ENT},
+  // |--------|--------|--------|--------|--------|--------|--------|  |--------|--------|--------|--------|--------|--------|--------|
+     {KC_LCTL, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_NO,      KC_NO,   KC_BRID, KC_BRIP, KC_MPRV, KC_MNXT, KC_MPLY, KC_RSFT},
+  // |--------|--------|--------|--------|--------|--------|                   |--------|--------|--------|--------|--------|--------|
+     {KC_NO,   KC_NO,   KC_NO,   KC_LGUI, KC_M03,  KC_SPC,  KC_NO,      KC_NO,  KC_SPC,  KC_M02,  KC_LALT, KC_NO,   KC_NO,   KC_NO},
+  //                            |--------|--------|--------|                   |--------|--------|--------|
   },
+
   {
-    {HID_KEY_TAB, HID_KEY_Q, HID_KEY_W, HID_KEY_E, HID_KEY_R, HID_KEY_T,'\0' ,'\0', HID_KEY_Y, HID_KEY_U, HID_KEY_I, HID_KEY_O, HID_KEY_P, HID_KEY_BACKSPACE},
-    {HID_KEY_SHIFT_LEFT, HID_KEY_A, HID_KEY_S, HID_KEY_D, HID_KEY_F, HID_KEY_G,'\0' ,'\0', HID_KEY_H, HID_KEY_J, HID_KEY_K, HID_KEY_L, HID_KEY_SEMICOLON, HID_KEY_ENTER},
-    {HID_KEY_CONTROL_LEFT, HID_KEY_Z, HID_KEY_X, HID_KEY_C, HID_KEY_V, HID_KEY_B,'\0' ,'\0', HID_KEY_N, HID_KEY_M, HID_KEY_COMMA, HID_KEY_PERIOD, HID_KEY_SLASH, '\0'},
-    {'\0', '\0', '\0', '\0', '\0', 1,'\0' ,'\0', HID_KEY_SPACE, 2, '\0','\0','\0','\0'},
+  // |--------|--------|--------|--------|--------|--------|--------|  |--------|--------|--------|--------|--------|--------|--------|
+     {KC_GRV,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_NO,      KC_NO,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11},
+  // |--------|--------|--------|--------|--------|--------|--------|  |--------|--------|--------|--------|--------|--------|--------|
+     {KC_LSFT, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_NO,      KC_NO,   KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_F12},
+  // |--------|--------|--------|--------|--------|--------|--------|  |--------|--------|--------|--------|--------|--------|--------|
+     {KC_LCTL, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_NO,      KC_NO,   KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT},
+  // |--------|--------|--------|--------|--------|--------|                   |--------|--------|--------|--------|--------|--------|
+     {KC_NO,   KC_NO,   KC_NO,   KC_LGUI, KC_M03,  KC_SPC,  KC_NO,      KC_NO,  KC_SPC,  KC_M03,  KC_LALT, KC_NO,   KC_NO,   KC_NO},
+  //                            |--------|--------|--------|                   |--------|--------|--------|
   }
 };
