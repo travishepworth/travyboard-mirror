@@ -1,17 +1,26 @@
+// debounce.h
 #ifndef DEBOUNCE_H
 #define DEBOUNCE_H
 
-#include "default.h"
+#include "matrix.h"
+#include "pico/time.h"
 #include <stdbool.h>
 #include <stdint.h>
 
+// Debounce configuration
+#define DEBOUNCE_TIME_MS 3
+#define TOTAL_KEYS (TOTAL_COLS * TOTAL_ROWS)
+
+// Debounce state structure
 typedef struct {
-  bool debounced;          // Last state of the key (pressed or not)
-  bool raw;    // Debounced state of the key
-  uint32_t last_change;
-} key_state_t;
+  uint8_t debounced_state[TOTAL_KEYS]; // Clean, stable key states
+  uint8_t raw_state[TOTAL_KEYS];       // Last raw reading for change detection
+  uint32_t release_timers[TOTAL_KEYS]; // Per-key release debounce timers
+                                       // (microseconds)
+} debounce_state_t;
 
-key_state_t key_matrix[TOTAL_ROWS][TOTAL_COLS]; // Matrix of key states
-
+// Function prototypes
+void debounce_init(debounce_state_t *debounce);
+void debounce_matrix(matrix_state_t *state, debounce_state_t *debounce);
 
 #endif // DEBOUNCE_H
