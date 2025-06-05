@@ -38,6 +38,6 @@ void initialize_layers(layer_keys_t *const layer);
 
 void store_layer_indices(keymap_t *const keymap, layer_keys_t const *const layer_info);
 
-uint8_t return_layer(matrix_state_t const *const state, layer_indices_t *const layer_indices);
+uint8_t return_layer(matrix_state_t const *const state, layer_indices_t const layer_indices);
 
 #endif // LAYER_PROCESSOR_H
