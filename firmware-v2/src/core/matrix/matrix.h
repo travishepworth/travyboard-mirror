@@ -12,29 +12,48 @@
 
 // Define a struct to hold the state of the matrix
 typedef struct {
-  uint8_t state[TOTAL_COLS * TOTAL_ROWS]; // Hardware state
-  uint8_t activated_keys[TOTAL_ROWS * TOTAL_COLS];
+  uint8_t state[MATRIX_SIZE]; // Hardware state
+  uint8_t activated_keys[MATRIX_SIZE];
   uint8_t total_activated_keys;
 } matrix_state_t;
 
-typedef void (*matrix_read_t)(matrix_state_t *const state);
+typedef struct {
+  union {
+    uint8_t row_pins_full[TOTAL_ROWS]; // Full row pins for single matrix
+    uint8_t row_pins_half[TOTAL_ROWS_HALF]; // Half row pins for split matrix
+  };
+  union {
+    uint8_t col_pins_full[TOTAL_COLS]; // Full column pins for single matrix
+    uint8_t col_pins_half[TOTAL_COLS_HALF]; // Half column pins for split matrix
+  };
+  uint8_t half; // TODO: move this to an enum
+} matrix_metadata_t;
+
+typedef void (*matrix_read_t)(matrix_state_t *const state, matrix_metadata_t *const metadata);
 extern matrix_read_t matrix_read;
 
-typedef void (*matrix_init_t)(void);
+typedef void (*matrix_init_t)(matrix_metadata_t *const metadata);
 extern matrix_init_t matrix_init;
 
 // Function to initialize the matrix
-void matrix_init_single(void);
-void matrix_init_split(void);
+void matrix_init_single(matrix_metadata_t *const metadata);
+void matrix_init_split(matrix_metadata_t *const metadata);
+
+void matrix_initialize_metadata(matrix_metadata_t *const metadata);
 
 void select_matrix_backend(void);
 
+void matrix_detect_half(matrix_metadata_t *const metadata);
+void matrix_split_set_metadata(matrix_metadata_t *const metadata);
+void matrix_single_set_metadata(matrix_metadata_t *const metadata);
+
 // Function to clear the matrix state
 void matrix_clear(matrix_state_t *const state);
+bool matrix_is_empty(matrix_state_t const *const state);
 
 // Functions to read the state of the matrix
-void matrix_read_single(matrix_state_t *const state);
-void matrix_read_split(matrix_state_t *const state);
+void matrix_read_single(matrix_state_t *const state, matrix_metadata_t *const metadata);
+void matrix_read_split(matrix_state_t *const state, matrix_metadata_t *const metadata);
 
 // Get an array of indices of pressed keys
 void matrix_convert(matrix_state_t *const state);

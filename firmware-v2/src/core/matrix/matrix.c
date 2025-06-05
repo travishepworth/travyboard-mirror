@@ -18,6 +18,11 @@ void matrix_clear(matrix_state_t *const state) {
   state->total_activated_keys = 0;
 };
 
+void matrix_initialize_metadata(matrix_metadata_t *const metadata) {
+  // Initialize the metadata for the matrix
+  memset(metadata, 0, sizeof(*metadata));
+}
+
 void matrix_convert(matrix_state_t *const state) {
   for (uint8_t matrix_index = 0; matrix_index < (MATRIX_SIZE); matrix_index++) {
     if (state->state[matrix_index]) {
@@ -31,4 +36,14 @@ void matrix_trim(matrix_state_t *const state) {
     memset(&state->activated_keys[6], 0, (MATRIX_SIZE - 6) * sizeof(uint8_t)); // Might as well clear to the end
     state->total_activated_keys = 6; // Max keys for key report
   }
+}
+
+bool matrix_is_empty(matrix_state_t const *const state) {
+  // Check if the matrix state is empty
+  for (uint8_t i = 0; i < MATRIX_SIZE; i++) {
+    if (state->state[i]) {
+      return false; // Found an active key
+    }
+  }
+  return true; // No active keys found
 }
