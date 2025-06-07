@@ -8,7 +8,7 @@
 #include <stdint.h>
 
 // Debounce configuration
-#define DEBOUNCE_TIME_MS 3
+#define DEBOUNCE_TIME_MS 5
 #define TOTAL_KEYS (TOTAL_COLS * TOTAL_ROWS)
 
 // Debounce state structure

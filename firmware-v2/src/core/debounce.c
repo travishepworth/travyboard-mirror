@@ -13,7 +13,7 @@ void debounce_matrix(matrix_state_t *state, debounce_state_t *debounce) {
   uint32_t current_time = time_us_32();
   const uint32_t debounce_time_us = DEBOUNCE_TIME_MS * 1000;
 
-  for (int i = 0; i < MATRIX_SIZE; i++) {
+  for (int i = 0; i < MATRIX_HALF_SIZE; i++) {
     uint8_t current_raw = state->state[i];
     uint8_t last_raw = debounce->raw_state[i];
     uint8_t debounced = debounce->debounced_state[i];
