@@ -25,70 +25,64 @@ void led_blinking_task(void); // define function prototype
 static uint32_t blink_interval_ms = BLINK_NOT_MOUNTED;
 
 static keymap_t keymap;
-static layer_keys_t layer_info;
 static keycode_report_t report;
 static matrix_metadata_t metadata;
 static debounce_state_t debounce_state;
+static matrix_state_t left_state;
+static uart_report_t uart_report;
 
 int main(void) {
-  // Init libraries
   board_init();
-  initialize_uart();
   tusb_init();
 
-  // Create required sctructs
-  // Initialize the keyboard
-  keyboard_init(&keymap, &layer_info, &metadata);
-  debounce_init(&debounce_state); // Initialize the debounce state
+  initialize_uart();
+  initialize_uart_report(&uart_report);
 
-  // Process logic
+  keyboard_init(&keymap, &metadata);
+  debounce_init(&debounce_state);
+  matrix_clear(&left_state);
+
   while (true) {
-    tud_task(); // TinyUSB task
-
+    tud_task();
     const uint32_t interval_ms = 1;
     static uint32_t start_ms = 0;
-
-    // Todo, almost a complete setup for a single keyboard
-    // Implement debounce, key sending
-    // Need to figure out kinks with uart and keyboard report
-    // Probably another function to read the other half?
-    // How should layers be concatenated into a single keymap
-    // with the halves translating accordingly
-    //
-    // Thinking probably something to merge the uart calls.
-
-    // Poll every 1ms
-
-    // Check for time since last poll
     if (board_millis() - start_ms < interval_ms) {
-      continue; // not enough time
+      continue;
     }
     start_ms += interval_ms;
 
-    matrix_state_t state;
+    matrix_state_t true_state;
     matrix_state_t right_state;
-    matrix_clear(&state);
+    matrix_clear(&true_state);
     matrix_clear(&right_state);
 
-    uart_report_t uart_report;
-    initialize_uart_report(&uart_report);
+    matrix_copy(&true_state, left_state);
+
+    // TODO: move to function, a bit too much logic for main
     if (uart_is_readable(UART_ID)) {
-      if (!recieve_uart_report(&state, &uart_report)) {
-        matrix_clear(&state);
+      clear_uart_report(&uart_report);
+      matrix_state_t incoming_state;
+      matrix_clear(&incoming_state);
+      
+      if (receive_uart_report(&incoming_state, &uart_report)) {
+        matrix_copy(&left_state, incoming_state);
+        matrix_copy(&true_state, left_state);
+      } else {
+        flush_uart();
       }
     }
 
     matrix_read(&right_state, &metadata);
-    matrix_concatenate(&state, &right_state);
-    debounce_matrix(&state, &debounce_state); // Debounce the matrix state
+    debounce_matrix(&right_state, &debounce_state);
+    // TODO: make this take 3 arguments, instead of copying left to true
+    matrix_concatenate(&true_state, &right_state);
     
-    matrix_convert(&state); // Extract array of indices from scan
+    matrix_convert(&true_state); // Extract array of indices from scan
 
-    set_layer(&keymap, return_layer(&state, keymap.layer_indices));
-    matrix_trim(&state);
+    set_layer(&keymap, get_active_layer(true_state, &keymap.layer_indices));
+    matrix_trim(&true_state);
 
-    set_keycodes(&keymap, &report, &state);
-
+    set_keycodes(&keymap, &report, &true_state);
     send_keyboard_report(&report);
   }
   return 0;

@@ -25,37 +25,45 @@ static uint32_t blink_interval_ms = BLINK_NOT_MOUNTED;
 static matrix_metadata_t metadata;
 static uart_report_t uart_report;
 static debounce_state_t debounce_state;
+static matrix_state_t previous_state;
 
 int main(void) {
-  // Init libraries
   board_init();
   initialize_uart();
   
   select_matrix_backend();
-  matrix_init(&metadata); // Init gpio pins for reading and writing
-  initialize_uart_report(&uart_report); // Initialize the UART report structure
-  debounce_init(&debounce_state); // Initialize the debounce state
+  matrix_init(&metadata);
+  initialize_uart_report(&uart_report);
+  debounce_init(&debounce_state);
+  matrix_clear(&previous_state);
 
-  // Process logic
+  static uint32_t last_send_ms = 0;
+  const uint32_t heartbeat_interval_ms = 5;
+
   while (true) {
-    matrix_state_t state;
-    matrix_clear(&state);
-    initialize_uart_report(&uart_report); // Clear the UART report structure
     const uint32_t interval_ms = 1;
     static uint32_t start_ms = 0;
-    
-    // Check for time since last poll
     if (board_millis() - start_ms < interval_ms) {
       continue; // not enough time
     }
     start_ms += interval_ms;
-    matrix_read(&state, &metadata); // Scan matrix, set depending on split or single
-    // check if state->state is empty
-    if (matrix_is_empty(&state)) {
-      continue; // No keys pressed, skip processing
+
+    matrix_state_t state;
+    matrix_clear(&state);
+    
+    matrix_read(&state, &metadata);
+    debounce_matrix(&state, &debounce_state);
+
+    bool state_changed = !matrix_state_equals(&state, &previous_state);
+    bool heartbeat_due = (board_millis() - last_send_ms) >= heartbeat_interval_ms;
+
+    if (state_changed || heartbeat_due) {
+      pack_uart_report(&state, &uart_report);
+      if (send_uart_report(&uart_report)) {
+        matrix_copy(&previous_state, state);
+        last_send_ms = board_millis();
+      }
     }
-    pack_uart_report(&state, &uart_report); // Pack the report with the current state
-    send_uart_report(&uart_report); // Send the report over UART
   }
   return 0;
 };
