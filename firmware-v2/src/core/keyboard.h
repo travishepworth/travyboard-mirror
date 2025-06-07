@@ -24,21 +24,26 @@ typedef struct {
   locked_keycodes_t current_keycodes;
 } keycode_report_t;
 
+void keyboard_init(keymap_t *const keymap, matrix_metadata_t *const metadata);
 
-void keyboard_init(keymap_t *const keymap,
-                   layer_keys_t *const layer_and_mode, matrix_metadata_t *const metadata);
-
-void process_matrix(keycode_report_t *report, keymap_t *keymap, matrix_metadata_t *const metadata);
+void process_matrix(keycode_report_t *report, keymap_t *keymap,
+                    matrix_metadata_t *const metadata);
 
 void send_keyboard_report(keycode_report_t *report);
 
-void lock_keycode(locked_keycodes_t *const previous_report, uint8_t keycode, uint8_t current_index);
+void lock_keycode(locked_keycodes_t *const previous_report, uint8_t keycode,
+                  uint8_t current_index);
 
 uint8_t set_modifier_bit(uint8_t keycode);
-uint8_t check_locked_index(locked_keycodes_t *const previous_report, uint8_t current_index);
+
+bool is_layer_key(uint8_t keycode);
+
+uint8_t check_locked_index(locked_keycodes_t *const previous_report,
+                           uint8_t current_index);
 
 void key_handler(keycode_report_t *const report, uint8_t keycode);
 
-void set_keycodes(keymap_t const *const keymap, keycode_report_t *const report, matrix_state_t const *const state);
+void set_keycodes(keymap_t const *const keymap, keycode_report_t *const report,
+                  matrix_state_t const *const state);
 
 #endif // KEYBOARD_H
