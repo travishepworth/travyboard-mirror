@@ -1,6 +1,7 @@
 #pragma once
 
 #include "class/hid/hid.h"
+#include "layer_processor.h"
 
 // Enum definition for all keycodes used in the firmware
 typedef enum {
@@ -107,12 +108,12 @@ typedef enum {
   KC_MPLY   = HID_USAGE_CONSUMER_PLAY_PAUSE,
 
   // Custom Layer Keys
-  KC_M01   = 0xFF, // Switch to Layer 1
-  KC_M02   = 0xF0,             // Switch to Layer 2
-  KC_M03   = 0xF1,             // Switch to Layer 2
-  KC_M04   = 0xF2,             // Switch to Layer 2
-  KC_M05   = 0xF3,             // Switch to Layer 2
-  KC_M06   = 0xF4,             // Switch to Layer 2
-  KC_M07   = 0xF5,             // Switch to Layer 2
+  KC_M01   = LAYER_KEY_M01,
+  KC_M02   = LAYER_KEY_M02,
+  KC_M03   = LAYER_KEY_M03,
+  KC_M04   = LAYER_KEY_M04,
+  KC_M05   = LAYER_KEY_M05,
+  KC_M06   = LAYER_KEY_M06,
+  KC_M07   = LAYER_KEY_M07,
 
 } Keycode;
