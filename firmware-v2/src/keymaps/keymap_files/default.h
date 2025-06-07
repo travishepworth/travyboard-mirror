@@ -14,6 +14,8 @@ enum KEYMAP_TOTALS {
   TOTAL_COLS_HALF = 7, // Half columns for split keyboards
   LEFT_HALF = 0, // Left half of the keyboard
   RIGHT_HALF = 1, // Right half of the keyboard
+  TOTAL_KEYS = (TOTAL_COLS * TOTAL_ROWS),
+  TOTAL_KEYS_HALF = (TOTAL_KEYS / 2)
 };
 
 extern const uint8_t keymap_default[TOTAL_LAYERS][TOTAL_ROWS_HALF][TOTAL_COLS]; // Default keymap
