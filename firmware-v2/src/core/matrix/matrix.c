@@ -47,3 +47,14 @@ bool matrix_is_empty(matrix_state_t const *const state) {
   }
   return true; // No active keys found
 }
+
+void matrix_copy(matrix_state_t *const target_matrix, matrix_state_t const source_matrix) {
+  // Copy the state from source_matrix to target_matrix
+  memcpy(target_matrix->state, source_matrix.state, sizeof(target_matrix->state));
+  memcpy(target_matrix->activated_keys, source_matrix.activated_keys, sizeof(target_matrix->activated_keys));
+  target_matrix->total_activated_keys = source_matrix.total_activated_keys;
+};
+
+bool matrix_state_equals(matrix_state_t const *const matrix_a, matrix_state_t const *const matrix_b) {
+  return (memcmp(matrix_a->state, matrix_b->state, sizeof(matrix_a->state)) == 0);
+}
