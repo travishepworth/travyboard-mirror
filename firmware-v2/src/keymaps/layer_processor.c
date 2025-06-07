@@ -1,73 +1,83 @@
-#include "layer_processor.h"
-#include "default.h"
-#include "keymap.h"
-#include "matrix.h"
 #include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
 
-void initialize_layers(layer_keys_t *const layer) {
-  // Init memory to zeroes
-  memcpy(layer->layer_keycodes, 0, NUM_POSSIBLE_LAYERS);
+#include "layer_processor.h"
+#include "default.h"
+#include "keymap.h"
+#include "matrix.h"
 
-  uint8_t temp_layers[NUM_POSSIBLE_LAYERS] = {
-    LAYER_DEFAULT,
-    LAYER_KEY_M01,
-    LAYER_KEY_M02,
-    LAYER_KEY_M03,
-    LAYER_KEY_M04,
-    LAYER_KEY_M05,
-    LAYER_KEY_M06,
-    LAYER_KEY_M07,
-  };
-
-  memcpy(layer->layer_keycodes, temp_layers, sizeof(temp_layers));
+void add_layer_key_position(layer_system_t *system, uint8_t key_index, uint8_t defined_layer, uint8_t target_layer) {
+  if (target_layer >= TOTAL_LAYERS) return;
+  
+  layer_key_group_t *group = &system->layer_keys[target_layer];
+  
+  if (group->count < TOTAL_ROWS * TOTAL_COLS) {
+    group->positions[group->count].key_index = key_index;
+    group->positions[group->count++].defined_layer = defined_layer;
+  }
 }
 
-// This took awhile to come too, but I think it is pretty good now
-void store_layer_indices(keymap_t *const keymap, layer_keys_t const *const layer_info) {
-  // Set pointer for readability
-  layer_index_t *keycode_indices;
-
+void store_layer_indices(keymap_t *const keymap) {
+  // Clear existing layer indices
+  memset(&keymap->layer_indices, 0, sizeof(layer_system_t));
+  
+  // Scan through all layers and positions
   for (uint8_t layer = 0; layer < TOTAL_LAYERS; layer++) {
     for (uint8_t matrix_index = 0; matrix_index < (TOTAL_COLS * TOTAL_ROWS); matrix_index++) {
-      for (uint8_t code = 0; code < TOTAL_LAYERS; code++) {
-        if (layer_info->layer_keycodes[code] == keymap->full_keymap[layer][matrix_index]) {
-
-          // Prevent re-writing the keycode
-          if (keymap->layer_indices.keycode[code] != layer_info->layer_keycodes[code]) {
-            keymap->layer_indices.keycode[code] = layer_info->layer_keycodes[code];
-          }
-
-          keycode_indices = &keymap->layer_indices.matrix_index[code];
-          if (keycode_indices->total < (TOTAL_COLS * TOTAL_ROWS)) {
-            keycode_indices->index[keycode_indices->total++] = matrix_index;
-          }
-        }
+      uint8_t keycode = keymap->full_keymap[layer][matrix_index];
+      
+      // Check if this is a layer key (within our layer keycode range)
+      // NOTE: do not define a layer key targeting a higher layer than your total layers
+      if (keycode >= LAYER_BASE && keycode < LAYER_BASE + TOTAL_LAYERS) {
+        uint8_t target_layer = keycode - LAYER_BASE;
+        
+        // Add this position to the appropriate layer group
+        add_layer_key_position(&keymap->layer_indices, matrix_index, layer, target_layer);
       }
     }
   }
 }
 
-uint8_t return_layer(matrix_state_t const *const state, layer_indices_t const layer_indices) {
-  uint8_t highest_layer = 0; // Default to layer 0
-
-  // Loop through all activated keys
-  for (uint8_t activated_index = 0; activated_index < state->total_activated_keys; ++activated_index) {
-    uint8_t key_index = state->activated_keys[activated_index];
+uint8_t get_active_layer(matrix_state_t const state, layer_system_t const *layer_system) {
+  uint8_t current_layer = 0;
+  bool layer_changed = true;
+  
+  while (layer_changed) {
+    layer_changed = false;
+    uint8_t highest_available = current_layer;
     
-    // Check each layer for a matching index
-    for (uint8_t layer = 0; layer < TOTAL_LAYERS; ++layer) {
-      for (uint8_t stored_index = 0; stored_index < layer_indices.matrix_index[layer].total; ++stored_index) {
-        if (layer_indices.matrix_index[layer].index[stored_index] == key_index) {
-          // Update highest_layer if this layer is higher
-          if (layer > highest_layer) {
-            highest_layer = layer;
+    // Check each possible target layer (skip layer 0 since we start there)
+    for (uint8_t target_layer = 1; target_layer < TOTAL_LAYERS; ++target_layer) {
+      if (target_layer <= highest_available) continue; // Only check higher layers
+      
+      // Check if any key that activates this target layer is pressed
+      bool layer_key_pressed = false;
+      for (uint8_t pos = 0; pos < layer_system->layer_keys[target_layer].count; ++pos) {
+        layer_key_position_t key_pos = layer_system->layer_keys[target_layer].positions[pos];
+        
+        // Only consider keys defined on the current layer
+        if (key_pos.defined_layer != current_layer) continue;
+        
+        // Check if this key is pressed
+        for (uint8_t i = 0; i < state.total_activated_keys; ++i) {
+          if (state.activated_keys[i] == key_pos.key_index) {
+            layer_key_pressed = true;
+            break;
           }
-          break; // Found a match in this layer, move to next key
         }
+        
+        if (layer_key_pressed) break;
+      }
+      
+      if (layer_key_pressed && target_layer > highest_available) {
+        highest_available = target_layer;
+        layer_changed = true;
       }
     }
+    
+    current_layer = highest_available;
   }
-  return highest_layer;
+  
+  return current_layer;
 }

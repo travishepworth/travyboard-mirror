@@ -5,25 +5,25 @@
 
 #define NUM_MODES 6
 
-// typedef struct {
-//   uint8_t modes_all[NUM_MODES][TOTAL_LAYERS][TOTAL_ROWS][TOTAL_COLS];
-// } keymap_modes_t;
+typedef struct {
+  uint8_t key_index; // raw index in keymap array
+  uint8_t defined_layer; // which of the layers this index maps to
+} layer_key_position_t;
 
+// All index positions that hold a layer key at x layer
+typedef struct {
+  layer_key_position_t positions[TOTAL_ROWS * TOTAL_COLS];
+  uint8_t count;
+} layer_key_group_t;
 
 typedef struct {
-  uint8_t index[TOTAL_ROWS * TOTAL_COLS];
-  uint8_t total;
-} layer_index_t;
-
-typedef struct {
-  layer_index_t matrix_index[TOTAL_LAYERS]; 
-  uint8_t keycode[TOTAL_LAYERS];
-} layer_indices_t ;
+  layer_key_group_t layer_keys[TOTAL_LAYERS];
+} layer_system_t;
 
 typedef struct {
   uint8_t full_keymap[TOTAL_LAYERS][TOTAL_COLS * TOTAL_ROWS]; // Fully flat may be better but I like multi-dimensional arrays
   uint8_t *active_keymap; // Pointer to current layer
-  layer_indices_t layer_indices;
+  layer_system_t layer_indices;
   uint8_t split_modifier;
 } keymap_t;
 
