@@ -9,7 +9,7 @@
 
 typedef struct {
   uint8_t keycodes[MAX_KEYCODES];
-  uint8_t indecies[MAX_KEYCODES];
+  uint8_t indices[MAX_KEYCODES];
   uint8_t count;
 } locked_keycodes_t;
 

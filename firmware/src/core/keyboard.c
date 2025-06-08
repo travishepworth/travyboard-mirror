@@ -36,7 +36,7 @@ void clear_current_report(keycode_report_t *const report) {
 uint8_t check_locked_index(locked_keycodes_t *const previous_report,
                            uint8_t current_index) {
   for (uint8_t index = 0; index < MAX_KEYCODES; ++index) {
-    if (current_index == previous_report->indecies[index]) {
+    if (current_index == previous_report->indices[index]) {
       return previous_report->keycodes[index];
     }
   }
@@ -46,7 +46,7 @@ uint8_t check_locked_index(locked_keycodes_t *const previous_report,
 void lock_keycode(locked_keycodes_t *const previous_report, uint8_t keycode,
                   uint8_t current_index) {
   previous_report->keycodes[previous_report->count] = keycode;
-  previous_report->indecies[previous_report->count++] = current_index;
+  previous_report->indices[previous_report->count++] = current_index;
 }
 
 void set_keycodes(keymap_t const *const keymap, keycode_report_t *const report,

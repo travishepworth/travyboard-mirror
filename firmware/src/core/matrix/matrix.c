@@ -26,7 +26,7 @@ void matrix_initialize_metadata(matrix_metadata_t *const metadata) {
   memset(metadata, 0, sizeof(*metadata));
 }
 
-// CORE: Extract indecies from bool array to single array
+// CORE: Extract indices from bool array to single array
 void matrix_convert(matrix_state_t *const state) {
   memset(state->activated_keys, 0, sizeof(state->activated_keys));
   for (uint8_t matrix_index = 0; matrix_index < (MATRIX_SIZE); matrix_index++) {
