@@ -1,7 +1,11 @@
-name: Build ARM Firmware
-on:
+name: Build Firmware
+
+"on":
   push:
     branches: [main]
+    paths:
+      - 'firmware/**'
+      - '.github/workflows/build.yaml'
   pull_request:
     branches: [main]
 
