@@ -23,18 +23,6 @@ keyboards with more features.
 - 4 layers
 - ws2812 rgb leds on every key
 
-### TODO
-
-- [x] Re-write firmware in C and fix the bugs
-- [ ] Create modular halves (gaming optimized, cad optimized, etc). I would consider the first iteration vim/coding/desktop optimized
-- [ ] Add rotary encoder support
-- [ ] Add OLED support
-- [ ] Add mode changing support
-- [ ] Add led firmware and effects
-- [ ] Revise case to show RGB better
-- [x] Add qmk support
-    - [ ] Add via support
-
 ### Requirements for building
 
 - Two Raspberry Pi Picos. I have the waveshare zeroes on the actual PCB.
