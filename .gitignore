@@ -1,8 +1,6 @@
 # ignore build and cache directory
 firmware/build/*
 firmware/.cache/*
-firmware-v2/build/*
-firmware-v2/.cache/*
 
 # Ignore kicad lockfiles
 *.lck
@@ -14,4 +12,5 @@ pcb/travyboard-backups/*
 
 # Ignore mac bullshit
 .DS_STORE
+
 firmware-v2/notes.md
