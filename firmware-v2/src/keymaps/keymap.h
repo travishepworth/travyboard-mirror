@@ -24,7 +24,6 @@ typedef struct {
   uint8_t full_keymap[TOTAL_LAYERS][TOTAL_COLS * TOTAL_ROWS]; // Fully flat may be better but I like multi-dimensional arrays
   uint8_t *active_keymap; // Pointer to current layer
   layer_system_t layer_indices;
-  uint8_t split_modifier;
 } keymap_t;
 
 typedef void (*keymap_callback_t)(keymap_t *const keymap);
