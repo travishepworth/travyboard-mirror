@@ -3,10 +3,6 @@
 set -e
 
 # Ensure script is run with sudo
-if [ "$EUID" -ne 0 ]; then
-  echo "This script must be run with sudo. Please re-run with: sudo $0 [--slave] [--clean|-c]"
-  exit 1
-fi
 
 working_dir=$(pwd)
 build_dir="$working_dir/build"
