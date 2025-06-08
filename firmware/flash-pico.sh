@@ -44,15 +44,19 @@ echo "Pico found: $device"
 mount_path="/dev/${device}1"
 echo "Mounting $mount_path to $mount_point"
 mkdir -p "$mount_point"
-mount "$mount_path" "$mount_point"
+sudo mount "$mount_path" "$mount_point"
+if [ $? -ne 0 ]; then
+  echo "Failed to mount $mount_path to $mount_point"
+  exit 1
+fi
 
 # Determine whether to flash master or slave
 if [[ "$@" =~ (--slave) ]]; then
   echo "Flashing slave to connected Pico"
-  cp ./src/devices/left_half/left_half.uf2 "$mount_point/"
+  sudo cp ./src/devices/left_half/left_half.uf2 "$mount_point/"
 else
   echo "Flashing master to connected Pico"
-  cp ./src/devices/right_half/right_half.uf2 "$mount_point/"
+  sudo cp ./src/devices/right_half/right_half.uf2 "$mount_point/"
 fi
 
 echo "Completed mounting and flashing Pico"
