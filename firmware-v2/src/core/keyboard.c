@@ -51,18 +51,24 @@ void lock_keycode(locked_keycodes_t *const previous_report, uint8_t keycode,
 
 void set_keycodes(keymap_t const *const keymap, keycode_report_t *const report,
                   matrix_state_t const *const state) {
+
   for (uint8_t index = 0; index < state->total_activated_keys; ++index) {
     if (state->activated_keys[index] < MATRIX_SIZE) {
-      lock_keycode(&report->current_keycodes,
-                   keymap->active_keymap[state->activated_keys[index]], index);
-      uint8_t pending_locked_keycode = check_locked_index(
-          &report->previous_keycodes, state->activated_keys[index]);
-      if (pending_locked_keycode == 0) {
-        // if (true) {
-        key_handler(report,
-                    keymap->active_keymap[state->activated_keys[index]]);
+      // Check if this key was already pressed in the previous scan
+      uint8_t locked_keycode = check_locked_index(&report->previous_keycodes, 
+                                                  state->activated_keys[index]);
+      
+      if (locked_keycode != 0) {
+        // Key was already pressed - use the locked keycode
+        lock_keycode(&report->current_keycodes, locked_keycode, 
+                     state->activated_keys[index]);
+        key_handler(report, locked_keycode);
       } else {
-        key_handler(report, pending_locked_keycode);
+        // New key press - use current layer's keycode
+        uint8_t current_keycode = keymap->active_keymap[state->activated_keys[index]];
+        lock_keycode(&report->current_keycodes, current_keycode, 
+                     state->activated_keys[index]);
+        key_handler(report, current_keycode);
       }
     }
   }
@@ -99,6 +105,7 @@ uint8_t set_modifier_bit(uint8_t keycode) {
 }
 
 // TODO: make this dynamic
+// TODO: Support modes
 bool is_layer_key(uint8_t keycode) {
   switch (keycode) {
   case LAYER_KEY_M01:
@@ -131,8 +138,7 @@ void key_handler(keycode_report_t *const report, uint8_t keycode) {
   case KC_MNXT:
   case KC_MPLY:
     report->media_key = keycode;
-    report->media_key_active = true;
-    break;
+    return;
   default:
     if (report->count < MAX_KEYCODES) {
       report->keycodes[report->count++] = keycode;
@@ -143,7 +149,6 @@ void key_handler(keycode_report_t *const report, uint8_t keycode) {
 
 void send_keyboard_report(keycode_report_t *const report) {
   if (tud_hid_ready()) {
-    // todo: move to loop and array to support multiple media keys
     if (!report->media_key_active && report->media_key != 0) {
       tud_hid_report(REPORT_ID_CONSUMER_CONTROL, &report->media_key,
                      sizeof(report->media_key));
