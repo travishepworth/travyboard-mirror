@@ -1,0 +1,6 @@
+[submodule "firmware/lib/RF24"]
+	path = firmware/lib/RF24
+	url = https://github.com/nRF24/RF24.git
+[submodule "firmware/lib/pico-sdk"]
+	path = firmware/lib/pico-sdk
+	url = https://github.com/raspberrypi/pico-sdk.git
