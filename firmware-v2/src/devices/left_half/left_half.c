@@ -30,7 +30,7 @@ static matrix_state_t previous_state;
 int main(void) {
   board_init();
   initialize_uart();
-  
+
   select_matrix_backend();
   matrix_init(&metadata);
   initialize_uart_report(&uart_report);
@@ -39,31 +39,38 @@ int main(void) {
 
   static uint32_t last_send_ms = 0;
   const uint32_t heartbeat_interval_ms = 5;
+  const uint32_t interval_ms = 1;
+  static uint32_t start_ms = 0;
 
   while (true) {
-    const uint32_t interval_ms = 1;
-    static uint32_t start_ms = 0;
-    if (board_millis() - start_ms < interval_ms) {
-      continue; // not enough time
-    }
-    start_ms += interval_ms;
+    uint32_t current_ms = board_millis();
 
-    matrix_state_t state;
-    matrix_clear(&state);
-    
-    matrix_read(&state, &metadata);
-    debounce_matrix(&state, &debounce_state);
+    // Always scan matrix at consistent intervals
+    if (current_ms - start_ms >= interval_ms) {
+      start_ms = current_ms; // Reset to current time (prevents drift)
 
-    bool state_changed = !matrix_state_equals(&state, &previous_state);
-    bool heartbeat_due = (board_millis() - last_send_ms) >= heartbeat_interval_ms;
+      matrix_state_t state;
+      matrix_clear(&state);
+      matrix_read(&state, &metadata);
+      debounce_matrix(&state, &debounce_state);
 
-    if (state_changed || heartbeat_due) {
-      pack_uart_report(&state, &uart_report);
-      if (send_uart_report(&uart_report)) {
+      bool state_changed = !matrix_state_equals(&state, &previous_state);
+      bool heartbeat_due = (current_ms - last_send_ms) >= heartbeat_interval_ms;
+
+      if (state_changed || heartbeat_due) {
+        pack_uart_report(&state, &uart_report);
+
+        // Try to send, but update state regardless
+        if (send_uart_report(&uart_report)) {
+          last_send_ms = current_ms;
+        }
+        // Always update previous_state to prevent spam retries
         matrix_copy(&previous_state, state);
-        last_send_ms = board_millis();
       }
     }
+
+    // Optional: small sleep to prevent busy waiting
+    sleep_us(100);
   }
   return 0;
 };
