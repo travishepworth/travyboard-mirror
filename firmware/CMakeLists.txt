@@ -10,13 +10,6 @@ project(travyboardv2 C CXX ASM)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
 
-set(PICOTOOL_FETCH_FROM_GIT_PATH ${PICOTOOL_EXECUTABLE})
-
-find_program(PICOTOOL_EXECUTABLE picotool)
-if(NOT PICOTOOL_EXECUTABLE)
-  message(FATAL_ERROR "picotool not found")
-endif()
-
 if(PICO_SDK_VERSION_STRING VERSION_LESS "1.3.0")
   message(
     FATAL_ERROR
