@@ -5,7 +5,7 @@ target_include_directories(
                 ${CMAKE_CURRENT_LIST_DIR}/../../tusb
                 ${CMAKE_CURRENT_LIST_DIR}/../../keymaps
                 ${CMAKE_CURRENT_LIST_DIR}/../../transport/uart
-                ${CMAKE_CURRENT_LIST_DIR}/../../keymaps/keymap_files)
+                ${CMAKE_CURRENT_LIST_DIR}/../../keymaps/boards/travyboard-v1)
 target_sources(right_half PUBLIC right_half.c 
   ${CMAKE_CURRENT_LIST_DIR}/../../core/keyboard.c
   ${CMAKE_CURRENT_LIST_DIR}/../../core/debounce.c
@@ -17,7 +17,7 @@ target_sources(right_half PUBLIC right_half.c
   ${CMAKE_CURRENT_LIST_DIR}/../../keymaps/keymap_split.c
   ${CMAKE_CURRENT_LIST_DIR}/../../transport/uart/uart.c
   ${CMAKE_CURRENT_LIST_DIR}/../../keymaps/layer_processor.c
-  ${CMAKE_CURRENT_LIST_DIR}/../../keymaps/keymap_files/default.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../keymaps/boards/travyboard-v1/default.c
   ${CMAKE_CURRENT_LIST_DIR}/../../tusb/tusb.c
   ${CMAKE_CURRENT_LIST_DIR}/../../tusb/usb_descriptors.c)
 
