@@ -47,10 +47,8 @@ bool matrix_is_empty(matrix_state_t const *const state) {
 }
 
 // HELPER: Copy entire state to other state
-void matrix_copy(matrix_state_t *const target_matrix, matrix_state_t const source_matrix) {
-  memcpy(target_matrix->state, source_matrix.state, sizeof(target_matrix->state));
-  memcpy(target_matrix->activated_keys, source_matrix.activated_keys, sizeof(target_matrix->activated_keys));
-  target_matrix->total_activated_keys = source_matrix.total_activated_keys;
+void matrix_copy(matrix_state_t *const target_matrix, matrix_state_t const *const source_matrix) {
+  memcpy(target_matrix, source_matrix, sizeof(matrix_state_t));
 };
 
 // HELPER: Compare two states
