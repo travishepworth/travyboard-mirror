@@ -62,7 +62,7 @@ void matrix_trim(matrix_state_t *const state);
 
 void matrix_concatenate(matrix_state_t *const state, const matrix_state_t *right_state);
 
-void matrix_copy(matrix_state_t *const target_matrix, matrix_state_t const source_matrix);
+void matrix_copy(matrix_state_t *const target_matrix, matrix_state_t const *const source_matrix);
 
 bool matrix_state_equals(matrix_state_t const *const matrix_a, matrix_state_t const *const matrix_b);
 
