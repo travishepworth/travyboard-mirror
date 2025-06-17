@@ -6,7 +6,7 @@ travyboard
 
 A personal project demonstrating how to build a keyboard using the
 Raspberry Pi Pico microcontroller in c++. Intent on expanding to create more powerful
-keyboards with more features.
+keyboards with more features (wireless coming soon).
 
 ### Photos
 <div style="display: flex; justify-content: space-around;">
