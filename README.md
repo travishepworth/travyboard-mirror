@@ -20,7 +20,7 @@ keyboards with more features (wireless coming soon).
 - 3x6 matrix with 3 button thumb clusters and 2 mode keys
 - Split one way communication
 - Full keymap controlled by the master pico
-- 4 layers
+- Dynamic layers
 - ws2812 rgb leds on every key
 
 ### Requirements for building

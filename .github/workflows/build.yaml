@@ -8,6 +8,7 @@ name: Build Firmware
       - '.github/workflows/build.yaml'
   pull_request:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
   build:
