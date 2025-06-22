@@ -5,7 +5,7 @@ name: Build Firmware
     branches: [main]
     paths:
       - 'firmware/**'
-      - '.github/workflows/build.yaml'
+      - '.forgejo/workflows/build.yaml'
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -19,7 +19,7 @@ jobs:
 
       - name: Install build tools
         run: |
-          sudo apk install --no-cache make cmake gcc-arm-none-eabi
+          apk install --no-cache make cmake gcc-arm-none-eabi
 
       - name: Initialize submodules
         run: |
