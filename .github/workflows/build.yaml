@@ -11,10 +11,12 @@ name: Build Firmware
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: [build]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        # uses: actions/checkout@v4
+        run: |
+          git clone https://code.batk.me/travmonkey/travyboard.git
 
       - name: Install build tools
         run: |
