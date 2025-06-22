@@ -15,9 +15,7 @@ jobs:
     runs-on: [build]
     steps:
       - name: Checkout code
-        # uses: actions/checkout@v4
-        run: |
-          git clone https://code.batk.me/travmonkey/travyboard.git
+        uses: actions/checkout@v4
 
       - name: Install build tools
         run: |
