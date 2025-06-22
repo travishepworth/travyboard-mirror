@@ -19,7 +19,7 @@ jobs:
 
       - name: Install build tools
         run: |
-          apk install --no-cache make cmake gcc-arm-none-eabi
+          apk add --no-cache make cmake gcc-arm-none-eabi
 
       - name: Initialize submodules
         run: |
